@@ -21,7 +21,7 @@ contract Manufacturer {
 
   // Define a modifier that checks to see if msg.sender has the appropriate role
   modifier onlyManufacturer() {
-    require(isManufacturer(msg.sender));
+    require(isManufacturer(msg.sender),"Only manufacturers");
     _;
   }
 
@@ -31,12 +31,12 @@ contract Manufacturer {
   }
 
   // Define a function 'addManufacturer' that adds this role
-  function addManufacturer(address account,string memory  name, string memory company,string memory identify, string memory latt, string memory longt) public onlyManufacturer {
+  function addManufacturer(address account,string memory  name, string memory company,string memory identify, string memory latt, string memory longt) public  {
     _addManufacturer(account,name, company,identify, latt, longt);
   }
 
   // Define a function 'renounceManufacturer' to renounce this role
-  function renounceManufacturer() public {
+  function renounceManufacturer() public onlyManufacturer{
     _removeManufacturer(msg.sender);
   }
     function getManufacturer(address _account) public view returns (address, string, string, string, string, string){

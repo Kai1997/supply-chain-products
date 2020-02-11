@@ -20,7 +20,7 @@ contract ConsumerRole {
 
   // Define a modifier that checks to see if msg.sender has the appropriate role
   modifier onlyConsumer() {
-    require(isConsumer(msg.sender));
+    require(isConsumer(msg.sender),"Only Consumer");
     _;
   }
 
@@ -30,12 +30,12 @@ contract ConsumerRole {
   }
 
   // Define a function 'addConsumer' that adds this role
-  function addConsumer(address account,string memory  name, string memory company,string memory identify, string memory latt, string memory longt) public onlyConsumer {
+  function addConsumer(address account,string memory  name, string memory company,string memory identify, string memory latt, string memory longt) public  {
     _addConsumer(account, name, company,identify, latt, longt);
   }
 
   // Define a function 'renounceConsumer' to renounce this role
-  function renounceConsumer() public {
+  function renounceConsumer() public onlyConsumer {
     _removeConsumer(msg.sender);
   }
     function getConsumer(address _account) public view returns (address, string, string, string,string, string){

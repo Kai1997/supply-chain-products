@@ -21,7 +21,7 @@ contract DistributorRole {
 
   // Define a modifier that checks to see if msg.sender has the appropriate role
   modifier onlyDistributor() {
-    require(isDistributor(msg.sender));
+    require(isDistributor(msg.sender),"only Distributor");
     _;
   }
 
@@ -31,12 +31,12 @@ contract DistributorRole {
   }
 
   // Define a function 'addDistributor' that adds this role
-  function addDistributor(address account,string memory  name, string memory company,string memory identify, string memory latt, string memory longt) public onlyDistributor {
+  function addDistributor(address account,string memory  name, string memory company,string memory identify, string memory latt, string memory longt) public  {
     _addDistributor(account,name, company,identify, latt, longt);
   }
 
   // Define a function 'renounceDistributor' to renounce this role
-  function renounceDistributor() public {
+  function renounceDistributor() public onlyDistributor {
     _removeDistributor(msg.sender);
   }
     function getDistributor(address _account) public view returns (address, string, string, string,string, string){

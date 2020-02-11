@@ -21,7 +21,7 @@ contract ThirdPLRole {
 
   // Define a modifier that checks to see if msg.sender has the appropriate role
   modifier onlyThirdPL() {
-    require(isThirdPL(msg.sender));
+    require(isThirdPL(msg.sender),"Only ThirdPL");
     _;
   }
 
@@ -31,12 +31,12 @@ contract ThirdPLRole {
   }
 
   // Define a function 'addThirdPL' that adds this role
-  function addThirdPL(address account,string memory  name, string memory company,string memory identify, string memory latt, string memory longt) public onlyThirdPL {
+  function addThirdPL(address account,string memory  name, string memory company,string memory identify, string memory latt, string memory longt) public  {
     _addThirdPL(account,name, company,identify, latt, longt);
   }
 
   // Define a function 'renounceThirdPL' to renounce this role
-  function renounceThirdPL() public {
+  function renounceThirdPL() public onlyThirdPL{
     _removeThirdPL(msg.sender);
   }
     function getThirdPL(address _account) public view returns (address, string, string, string,string, string){

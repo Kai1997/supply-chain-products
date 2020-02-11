@@ -1,18 +1,17 @@
 pragma solidity ^0.4.24;
-// admin chấp nhận thì mới thêm vào hệ thống 
-// Import the library 'Roles'
+
+// farmer được admin chấp nhận thì mới thêm vào hệ thống 
+
 import "./Roles.sol";
-// import './Admin.sol';
 
 interface AdminInterface {
-    function addAdmin(address _account) external;
-    function removeAdmin(address account) external ;
     function isAdmin(address account) view external returns(bool);
 }
+
 // Define a contract 'FarmerRole' to manage this role - add, remove, check
 contract FarmerRole {
   using Roles for Roles.Role;
-    AdminInterface AdminContract;
+    AdminInterface public AdminContract;
   // Define 2 events, one for Adding, and other for Removing
   event LogFarmerAdded(address indexed account,string name, string company, string identify, string lat, string longt, uint timeAdd);
   event LogFarmerRemoved(address indexed account,uint timeAdd);
@@ -21,13 +20,13 @@ contract FarmerRole {
   Roles.Role private farmers;
 
   // In the constructor make the address that deploys this contract the 1st farmer
-  constructor() public {
-    // _addFarmer(msg.sender);
+  constructor(address _contract) public {
+      AdminContract = AdminInterface(_contract);
   }
 
   // Define a modifier that checks to see if msg.sender has the appropriate role
   modifier onlyFarmer() {
-    require(isFarmer(msg.sender));
+    require(isFarmer(msg.sender),"Only Farmer");
     _;
   }
     function joinNetwork(address _contract)
@@ -42,8 +41,8 @@ contract FarmerRole {
   }
 
   // Define a function 'addFarmer' that adds this role
-  function addFarmer(address account,string memory  name, string memory company,string memory identify, string memory latt, string memory longt) public  {
-    _addFarmer(account,name, company,identify, latt, longt);
+  function addFarmer(address account,string memory  name, string memory company,string memory identify, string memory lati, string memory longt) public  {
+    _addFarmer(account,name, company,identify, lati, longt);
   }
 
   // Define a function 'renounceFarmer' to renounce this role

@@ -21,7 +21,7 @@ contract RetailerRole {
 
   // Define a modifier that checks to see if msg.sender has the appropriate role
   modifier onlyRetailer() {
-    require(isRetailer(msg.sender));
+    require(isRetailer(msg.sender),"Only retailer");
     _;
   }
 
@@ -31,12 +31,12 @@ contract RetailerRole {
   }
 
   // Define a function 'addRetailer' that adds this role
-  function addRetailer(address account,string memory  name, string memory company,string memory identify, string memory latt, string memory longt) public onlyRetailer {
+  function addRetailer(address account,string memory  name, string memory company,string memory identify, string memory latt, string memory longt) public  {
     _addRetailer(account,name, company,identify, latt, longt); 
   }
 
   // Define a function 'renounceRetailer' to renounce this role
-  function renounceRetailer() public {
+  function renounceRetailer() public onlyRetailer {
     _removeRetailer(msg.sender);
   }
     function getRetailer(address _account) public view returns (address, string, string,string, string, string){
