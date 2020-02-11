@@ -8,7 +8,7 @@ contract ThirdPLRole {
   using Roles for Roles.Role;
 
   // Define 2 events, one for Adding, and other for Removing
-  event LogThirdPLAdded(address indexed account,uint timeAdd);
+  event LogThirdPLAdded(address indexed account,string name, string company, string identify, string lat, string longt, uint timeAdd);
   event LogThirdPLRemoved(address indexed account,uint timeAdd);
 
   // Define a struct 'thirdPLs' by inheriting from 'Roles' library, struct Role
@@ -31,21 +31,21 @@ contract ThirdPLRole {
   }
 
   // Define a function 'addThirdPL' that adds this role
-  function addThirdPL(address account,string memory  name, string memory company, string memory latt, string memory longt) public onlyThirdPL {
-    _addThirdPL(account,name, company, latt, longt);
+  function addThirdPL(address account,string memory  name, string memory company,string memory identify, string memory latt, string memory longt) public onlyThirdPL {
+    _addThirdPL(account,name, company,identify, latt, longt);
   }
 
   // Define a function 'renounceThirdPL' to renounce this role
   function renounceThirdPL() public {
     _removeThirdPL(msg.sender);
   }
-    function getThirdPL(address _account) public view returns (address, string, string, string, string){
+    function getThirdPL(address _account) public view returns (address, string, string, string,string, string){
        return thirdPLs.get(_account);
     }
   // Define an internal function '_addThirdPL' to add this role, called by 'addThirdPL'
-  function _addThirdPL(address account,string memory  name, string memory company, string memory latt, string memory longt) internal {
-    thirdPLs.add(account,name, company, latt, longt);
-    emit LogThirdPLAdded(account,now);
+  function _addThirdPL(address account,string memory  name, string memory company,string memory identify, string memory lati, string memory longt) internal {
+    thirdPLs.add(account,name, company,identify, lati, longt);
+    emit LogThirdPLAdded(account,name, company,identify, lati, longt,now);
   }
 
   // Define an internal function '_removeThirdPL' to remove this role, called by 'removeThirdPL'

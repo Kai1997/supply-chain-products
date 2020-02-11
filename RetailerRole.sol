@@ -8,7 +8,7 @@ contract RetailerRole {
   using Roles for Roles.Role;
 
   // Define 2 events, one for Adding, and other for Removing
-  event RetailerAdded(address indexed account,uint timeAdd);
+  event RetailerAdded(address indexed account,string name, string company, string identify, string lat, string longt, uint timeAdd);
   event RetailerRemoved(address indexed account,uint timeAdd);
   
   // Define a struct 'retailers' by inheriting from 'Roles' library, struct Role
@@ -31,21 +31,21 @@ contract RetailerRole {
   }
 
   // Define a function 'addRetailer' that adds this role
-  function addRetailer(address account,string memory  name, string memory company, string memory latt, string memory longt) public onlyRetailer {
-    _addRetailer(account,name, company, latt, longt); 
+  function addRetailer(address account,string memory  name, string memory company,string memory identify, string memory latt, string memory longt) public onlyRetailer {
+    _addRetailer(account,name, company,identify, latt, longt); 
   }
 
   // Define a function 'renounceRetailer' to renounce this role
   function renounceRetailer() public {
     _removeRetailer(msg.sender);
   }
-    function getRetailer(address _account) public view returns (address, string, string, string, string){
+    function getRetailer(address _account) public view returns (address, string, string,string, string, string){
        return retailers.get(_account);
     }
   // Define an internal function '_addRetailer' to add this role, called by 'addRetailer'
-  function _addRetailer(address account,string memory  name, string memory company, string memory latt, string memory longt) internal {
-    retailers.add(account,name, company, latt, longt);
-    emit RetailerAdded(account,now);
+  function _addRetailer(address account,string memory  name, string memory company,string memory identify, string memory lati, string memory longt) internal {
+    retailers.add(account,name, company, identify, lati, longt);
+    emit RetailerAdded(account,name, company,identify, lati, longt,now);
   }
 
   // Define an internal function '_removeRetailer' to remove this role, called by 'removeRetailer'

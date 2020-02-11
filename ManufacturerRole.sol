@@ -8,7 +8,7 @@ contract Manufacturer {
   using Roles for Roles.Role;
 
   // Define 2 events, one for Adding, and other for Removing
-  event LogManufacturerAdded(address indexed account,uint timeAdd);
+  event LogManufacturerAdded(address indexed account,string name, string company, string identify, string lat, string longt, uint timeAdd);
   event LogManufacturerRemoved(address indexed account,uint timeAdd);
 
   // Define a struct 'manufacturers' by inheriting from 'Roles' library, struct Role
@@ -31,21 +31,21 @@ contract Manufacturer {
   }
 
   // Define a function 'addManufacturer' that adds this role
-  function addManufacturer(address account,string memory  name, string memory company, string memory latt, string memory longt) public onlyManufacturer {
-    _addManufacturer(account,name, company, latt, longt);
+  function addManufacturer(address account,string memory  name, string memory company,string memory identify, string memory latt, string memory longt) public onlyManufacturer {
+    _addManufacturer(account,name, company,identify, latt, longt);
   }
 
   // Define a function 'renounceManufacturer' to renounce this role
   function renounceManufacturer() public {
     _removeManufacturer(msg.sender);
   }
-    function getManufacturer(address _account) public view returns (address, string, string, string, string){
+    function getManufacturer(address _account) public view returns (address, string, string, string, string, string){
        return manufacturers.get(_account);
     }
   // Define an internal function '_addManufacturer' to add this role, called by 'addManufacturer'
-  function _addManufacturer(address account,string memory  name, string memory company, string memory latt, string memory longt) internal {
-    manufacturers.add(account,name, company, latt, longt);
-    emit LogManufacturerAdded(account,now);
+  function _addManufacturer(address account,string memory  name, string memory company,string memory identify, string memory lati, string memory longt) internal {
+    manufacturers.add(account,name, company,identify, lati, longt);
+    emit LogManufacturerAdded(account,name, company,identify, lati, longt,now);
   }
 
   // Define an internal function '_removeManufacturer' to remove this role, called by 'removeManufacturer'

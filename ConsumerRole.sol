@@ -7,9 +7,9 @@ contract ConsumerRole {
   using Roles for Roles.Role;
 
   // Define 2 events, one for Adding, and other for Removing
-  event ConsumerAdded(address indexed account, uint timeAdd);
+  event ConsumerAdded(address indexed account,string name, string company, string identify, string lat, string longt, uint timeAdd);
   event ConsumerRemoved(address indexed account, uint timeRemove);
-
+    
   // Define a struct 'consumers' by inheriting from 'Roles' library, struct Role
   Roles.Role private consumers;
 
@@ -30,21 +30,21 @@ contract ConsumerRole {
   }
 
   // Define a function 'addConsumer' that adds this role
-  function addConsumer(address account,string memory  name, string memory company, string memory latt, string memory longt) public onlyConsumer {
-    _addConsumer(account, name, company, latt, longt);
+  function addConsumer(address account,string memory  name, string memory company,string memory identify, string memory latt, string memory longt) public onlyConsumer {
+    _addConsumer(account, name, company,identify, latt, longt);
   }
 
   // Define a function 'renounceConsumer' to renounce this role
   function renounceConsumer() public {
     _removeConsumer(msg.sender);
   }
-    function getConsumer(address _account) public view returns (address, string, string, string, string){
+    function getConsumer(address _account) public view returns (address, string, string, string,string, string){
        return consumers.get(_account);
     }
   // Define an internal function '_addConsumer' to add this role, called by 'addConsumer'
-  function _addConsumer(address account, string memory  name, string memory company, string memory latt, string memory longt) internal {
-    consumers.add(account,name, company, latt, longt);
-    emit ConsumerAdded(account,now);
+  function _addConsumer(address account, string memory  name, string memory company,string memory identify, string memory lati, string memory longt) internal {
+    consumers.add(account,name, company,identify, lati, longt);
+    emit ConsumerAdded(account,name, company,identify, lati, longt,now);
   }
 
   // Define an internal function '_removeConsumer' to remove this role, called by 'removeConsumer'

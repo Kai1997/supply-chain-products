@@ -8,7 +8,7 @@ contract DistributorRole {
   using Roles for Roles.Role;
 
   // Define 2 events, one for Adding, and other for Removing
-  event LogDistributorAdded(address indexed account, uint timeAdd);
+  event LogDistributorAdded(address indexed account,string name, string company, string identify, string lat, string longt, uint timeAdd);
   event LogDistributorRemoved(address indexed account, uint timeAdd);
 
   // Define a struct 'distributors' by inheriting from 'Roles' library, struct Role
@@ -31,21 +31,21 @@ contract DistributorRole {
   }
 
   // Define a function 'addDistributor' that adds this role
-  function addDistributor(address account,string memory  name, string memory company, string memory latt, string memory longt) public onlyDistributor {
-    _addDistributor(account,name, company, latt, longt);
+  function addDistributor(address account,string memory  name, string memory company,string memory identify, string memory latt, string memory longt) public onlyDistributor {
+    _addDistributor(account,name, company,identify, latt, longt);
   }
 
   // Define a function 'renounceDistributor' to renounce this role
   function renounceDistributor() public {
     _removeDistributor(msg.sender);
   }
-    function getDistributor(address _account) public view returns (address, string, string, string, string){
+    function getDistributor(address _account) public view returns (address, string, string, string,string, string){
        return distributors.get(_account);
     }
   // Define an internal function '_addDistributor' to add this role, called by 'addDistributor'
-  function _addDistributor(address account, string memory  name, string memory company, string memory latt, string memory longt) internal {
-    distributors.add(account,name, company, latt, longt);
-    emit LogDistributorAdded(account,now);
+  function _addDistributor(address account, string memory  name, string memory company, string memory identify,string memory lati, string memory longt) internal {
+    distributors.add(account,name, company,identify, lati, longt);
+    emit LogDistributorAdded(account,name, company,identify, lati, longt,now);
   }
 
   // Define an internal function '_removeDistributor' to remove this role, called by 'removeDistributor'

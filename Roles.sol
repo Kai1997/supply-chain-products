@@ -12,25 +12,27 @@ library Roles {
         address account;
         bool status;
         string name;
+        string identify;
         string company;
-        string latt;
+        string lati;
         string longt;
     }
     
   /**
    * @dev give an account access to this role
    */
-  function add(Role storage role, address account, string memory  name, string memory company, string memory latt, string memory longt) internal {
-    require(account != address(0),"Account not exist");
-    require(!has(role, account),"Account not register");
+  function add(Role storage role, address _account, string memory  _name, string memory _company,string memory _identify, string memory _lati, string memory _longt) internal {
+    require(_account != address(0),"Account not exist");
+    require(!has(role, _account),"Account not register");
 
-    role.bearer[account] = User({
-        account: account,
+    role.bearer[_account] = User({
+        account: _account,
         status: true,
-        name : name,
-        company : company,
-        latt : latt,
-        longt : longt
+        name : _name,
+        company : _company,
+        identify : _identify,
+        lati : _lati,
+        longt : _longt
     });
    
   }
@@ -71,6 +73,7 @@ library Roles {
       address, 
       string, 
       string, 
+      string,
       string, 
       string
       )
@@ -81,8 +84,9 @@ library Roles {
     return (
         role.bearer[_account].account,
         role.bearer[_account].name, 
-        role.bearer[_account].company, 
-        role.bearer[_account].latt, 
+        role.bearer[_account].company,
+        role.bearer[_account].identify,
+        role.bearer[_account].lati, 
         role.bearer[_account].longt
         );
   }
