@@ -40,31 +40,31 @@ library Roles {
   /**
    * @dev remove an account's access to this role
    */
-  function remove(Role storage role, address account) internal {
-    require(account != address(0),"Account not exist");
-    require(has(role, account),"Account not register");
+  function remove(Role storage _role, address _account) internal {
+    require(_account != address(0),"Account not exist");
+    require(has(_role, _account),"Account not register");
     
-    role.bearer[account].status = false;
+    _role.bearer[_account].status = false;
   }
 
   /**
    * @dev check if an account has this role
    * @return bool
    */
-  function has(Role storage role, address account)
+  function has(Role storage _role, address _account)
     internal
     view
     returns (bool)
   {
-    require(account != address(0),"Account not exist");
+    require(_account != address(0),"Account not exist");
     
-    return role.bearer[account].status == true;
+    return _role.bearer[_account].status == true;
   }
     /**
     * @dev get infomation user
     */
     function get(
-        Role storage role, 
+        Role storage _role, 
         address _account
     ) 
     internal 
@@ -79,15 +79,15 @@ library Roles {
       )
     {
     require(_account != address(0),"Account not exist");
-    require(has(role, _account),"Account not register");
+    require(has(_role, _account),"Account not register");
     
     return (
-        role.bearer[_account].account,
-        role.bearer[_account].name, 
-        role.bearer[_account].company,
-        role.bearer[_account].identify,
-        role.bearer[_account].lati, 
-        role.bearer[_account].longt
+        _role.bearer[_account].account,
+        _role.bearer[_account].name, 
+        _role.bearer[_account].company,
+        _role.bearer[_account].identify,
+        _role.bearer[_account].lati, 
+        _role.bearer[_account].longt
         );
   }
 
