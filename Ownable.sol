@@ -5,7 +5,7 @@ contract Ownable {
     address private origOwner;
 
     // Define an Event
-    event LogSetOwner(address indexed oldOwner, address indexed newOwner);
+    event LogSetOwner(address indexed _oldOwner, address indexed _newOwner);
 
     /// Assign the contract to an owner
     constructor () internal {
@@ -36,15 +36,15 @@ contract Ownable {
     }
 
     /// Define a public function to transfer ownership
-    function transferOwnership(address newOwner) public onlyOwner {
-        _transferOwnership(newOwner);
+    function transferOwnership(address _newOwner) public onlyOwner {
+        _transferOwnership(_newOwner);
     }
 
     /// Define an internal function to transfer ownership
-    function _transferOwnership(address newOwner) internal {
-        require(newOwner != address(0),"Address not exist");
-        emit LogSetOwner(origOwner, newOwner);
-        origOwner = newOwner;
+    function _transferOwnership(address _newOwner) internal {
+        require(_newOwner != address(0),"Address not exist");
+        emit LogSetOwner(origOwner, _newOwner);
+        origOwner = _newOwner;
     }
 }
 
