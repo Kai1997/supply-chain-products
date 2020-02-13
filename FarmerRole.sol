@@ -1,5 +1,5 @@
 pragma solidity ^0.4.24;
-
+//0xa646C5af0a0425F51cbAEEa84d182adD98FAfb4F
 // farmer được admin chấp nhận thì mới thêm vào hệ thống 
 
 library Roles {
@@ -122,6 +122,10 @@ contract FarmerRole {
     public
   {
       AdminContract = AdminInterface(_contract);
+  }
+  
+  function checkIsAdmin() public view returns(bool) {
+      return AdminContract.isAdmin(msg.sender);
   }
   
   // Define a function 'isFarmer' to check this role
