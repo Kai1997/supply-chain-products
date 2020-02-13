@@ -1,5 +1,5 @@
 pragma solidity ^0.4.24;
-
+// manu : 0xD57b5e5C2A69e653b51103E81Ba50b9f9C77650b
 library Roles {
     struct Role {
         mapping (address => User) bearer;
@@ -121,6 +121,10 @@ contract Manufacturer {
       AdminContract = AdminInterface(_contract);
   }
 
+  function checkIsAdmin() public view returns(bool) {
+      return AdminContract.isAdmin(msg.sender);
+  }
+  
   // Define a function 'isManufacturer' to check this role
   function isManufacturer(address _account) public view returns (bool) {
     return manufacturers.has(_account);
@@ -132,12 +136,12 @@ contract Manufacturer {
   }
 
   // Define a function 'renounceManufacturer' to renounce this role
-  function renounceManufacturer() public {
-    _removeManufacturer(msg.sender);
+  function renounceManufacturer(address _account) public {
+    _removeManufacturer(_account);
   }
-    function getManufacturer(address _account) public view returns (address, string, string, string, string, string){
-       return manufacturers.get(_account);
-    }
+  function getManufacturer(address _account) public view returns (address, string, string, string, string, string){
+   return manufacturers.get(_account);
+  }
   // Define an internal function '_addManufacturer' to add this role, called by 'addManufacturer'
   function _addManufacturer(address _account, string memory _name, string memory _company,string memory _identify, string memory _lati, string memory _longt) internal onlyAdmin {
     manufacturers.add(_account, _name, _company, _identify, _lati, _longt);
