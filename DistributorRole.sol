@@ -1,5 +1,5 @@
 pragma solidity ^0.4.24;
-
+// dis : 0x82B8c41919cDad2fc8Ee835f2192363EaBcA2452
 library Roles {
     struct Role {
         mapping (address => User) bearer;
@@ -120,7 +120,11 @@ contract DistributorRole {
   {
       AdminContract = AdminInterface(_contract);
   }
-
+  
+  function checkIsAdmin() public view returns(bool) {
+      return AdminContract.isAdmin(msg.sender);
+  }
+  
   // Define a function 'isDistributor' to check this role
   function isDistributor(address _account) public view returns (bool) {
     return distributors.has(_account);
@@ -132,8 +136,8 @@ contract DistributorRole {
   }
 
   // Define a function 'renounceDistributor' to renounce this role
-  function renounceDistributor() public  {
-    _removeDistributor(msg.sender);
+  function renounceDistributor( address _account) public  {
+    _removeDistributor(_account);
   }
     function getDistributor(address _account) public view returns (address, string, string, string,string, string){
        return distributors.get(_account);
