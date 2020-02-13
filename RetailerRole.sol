@@ -1,5 +1,9 @@
 pragma solidity ^0.4.24;
 // retail " 0xEd5F17c295839b1872EC488e699096441a084eaa"
+
+/*==========================================
+ =          Library Roles                  =
+ ==========================================*/
 library Roles {
     struct Role {
         mapping (address => User) bearer;
@@ -89,64 +93,116 @@ library Roles {
 
 }
 
+/*==========================================
+ =          Interface Admin                =
+ ==========================================*/
 interface AdminInterface {
     function isAdmin(address _account) view external returns(bool);
 }
 
-// Define a contract 'RetailerRole' to manage this role - add, remove, check
+/*==========================================
+ =          Contract RetailerRole          =
+ ==========================================*/
 contract RetailerRole {
   using Roles for Roles.Role;
 
-  AdminInterface public AdminContract;
+  AdminInterface public AdminContract;          //Define interface: adminContract
+  
+  /*----------  START EVENT  ----------*/ 
   // Define 2 events, one for Adding, and other for Removing
   event RetailerAdded(address indexed _account,string _name, string _company, string _identify, string _lat, string _longt, uint _timeAdd);
   event RetailerRemoved(address indexed _account,uint _timeAdd);
+  /*----------  END EVENT  ----------*/ 
   
   // Define a struct 'retailers' by inheriting from 'Roles' library, struct Role
   Roles.Role private retailers;
 
+  /*constructor to join address contract of AdminContract
+   *@param _contract : is address contract of  AdminContract
+   */
   constructor(address _contract) public {
       AdminContract = AdminInterface(_contract);
   }
 
+  /*----------  START MODIFIER  ----------*/
   // Define a modifier that checks to see if msg.sender has the appropriate role
   modifier onlyAdmin() {
     require(AdminContract.isAdmin(msg.sender),"Not is admin");
     _;
   }
+  /*----------  END MODIFIER  ----------*/
   
+  /*function 'joinNetwork' to join address contract of AdminContract
+   *@param _contract : is address contract of  AdminContract
+   */
   function joinNetwork(address _contract)
     public
   {
       AdminContract = AdminInterface(_contract);
   }
+  
+  /*function 'checkIsAdmin' to check msg.sender is Admin or not
+   *@return bool
+   */
   function checkIsAdmin() public view returns(bool) {
       return AdminContract.isAdmin(msg.sender);
   }
-  // Define a function 'isRetailer' to check this role
+  
+  /*function 'isRetailer' to check _account is Retailer or not
+   *@param _account : is address metamask of Retailer
+   *@return bool
+   */
   function isRetailer(address _account) public view returns (bool) {
     return retailers.has(_account);
   }
 
-  // Define a function 'addRetailer' that adds this role
+   /*function 'addRetailer' to add a Retailer to chain
+   *@param _account : is address metamask of Retailer
+   *@param _name : is name of Retailer
+   *@param _company : is company of Retailer
+   *@param _identify : is identify of Retailer
+   *@param _lati : is latitude of Retailer
+   *@param _longt : is longitude of Retailer
+   */
   function addRetailer(address _account, string memory _name, string memory _company, string memory _identify, string memory _lati, string memory _longt) public  {
     _addRetailer(_account, _name, _company, _identify, _lati, _longt); 
   }
 
-  // Define a function 'renounceRetailer' to renounce this role
+  /*function 'renounceRetailer' to remove a Retailer out chain
+   *@param _account : is address metamask of Retailer
+   */
   function renounceRetailer(address _account) public {
     _removeRetailer(_account);
   }
-    function getRetailer(address _account) public view returns (address, string, string, string, string, string){
-       return retailers.get(_account);
-    }
-  // Define an internal function '_addRetailer' to add this role, called by 'addRetailer'
+  
+  /*function 'getRetailer' to get information a Retailer
+   *@param _account : is address metamask of Retailer
+   *@returns : account, name, company, identify, latitude, longitude
+   */
+  function getRetailer(address _account) public view returns (address, string, string, string, string, string){
+    return retailers.get(_account);
+  }
+  
+  /* Define an internal function '_addRetailer' to add this role, called by 'addRetailer'
+   *@param _account : is address metamask of Retailer
+   *@param _name : is name of Retailer
+   *@param _company : is company of Retailer
+   *@param _identify : is identify of Retailer
+   *@param _lati : is latitude of Retailer
+   *@param _longt : is longitude of Retailer
+   *@modifier onlyAdmin : check is msg.sender is admin or not
+   *@event LogFarmerAdded : log information Retailer in chain
+   */  
   function _addRetailer(address _account, string memory _name, string memory _company,string memory _identify, string memory _lati, string memory _longt) internal onlyAdmin {
     retailers.add(_account, _name, _company, _identify, _lati, _longt);
     emit RetailerAdded(_account, _name, _company, _identify, _lati, _longt,now);
   }
 
-  // Define an internal function '_removeRetailer' to remove this role, called by 'removeRetailer'
+  /* Define an internal function '_removeRetailer' to remove this role, called by 'removeRetailer'
+   *@param _account : is address metamask of Retailer
+   *@modifier onlyAdmin : check is msg.sender is admin or not
+   *@event LogFarmerRemoved : log information Retailer in chain
+   */ 
   function _removeRetailer(address _account) internal onlyAdmin {
     retailers.remove(_account);
     emit RetailerRemoved(_account, now);

@@ -1,5 +1,9 @@
 pragma solidity ^0.4.24;
 // third : 0x8aCCa2d7316E1d0C17c2105e91509aba226ddb10
+
+/*==========================================
+ =          Library Roles                  =
+ ==========================================*/
 library Roles {
     struct Role {
         mapping (address => User) bearer;
@@ -89,64 +93,116 @@ library Roles {
 
 }
 
+/*==========================================
+ =          Interface Admin                =
+ ==========================================*/
 interface AdminInterface {
     function isAdmin(address _account) view external returns(bool);
 }
 
-// Define a contract 'ThirdPL' to manage this role - add, remove, check
+/*==========================================
+ =          Contract ThirdPLRole           =
+ ==========================================*/
 contract ThirdPLRole {
   using Roles for Roles.Role;
 
   AdminInterface public AdminContract;
+  
+  /*----------  START EVENT  ----------*/ 
   // Define 2 events, one for Adding, and other for Removing
   event LogThirdPLAdded(address indexed _account,string _name, string _company, string _identify, string _lat, string _longt, uint _timeAdd);
   event LogThirdPLRemoved(address indexed account,uint timeAdd);
-
+  /*----------  END EVENT  ----------*/ 
+  
   // Define a struct 'thirdPLs' by inheriting from 'Roles' library, struct Role
   Roles.Role private thirdPLs;
-
+  
+  /*constructor to join address contract of AdminContract
+   *@param _contract : is address contract of  AdminContract
+   */
   constructor(address _contract) public {
       AdminContract = AdminInterface(_contract);
   }
-
+  
+  /*----------  START MODIFIER  ----------*/
   // Define a modifier that checks to see if msg.sender has the appropriate role
   modifier onlyAdmin() {
     require(AdminContract.isAdmin(msg.sender),"Not is admin");
     _;
   }
+  /*----------  END MODIFIER  ----------*/
   
+  /*function 'joinNetwork' to join address contract of AdminContract
+   *@param _contract : is address contract of  AdminContract
+   */
   function joinNetwork(address _contract)
     public
   {
       AdminContract = AdminInterface(_contract);
   }
+  
+  /*function 'checkIsAdmin' to check msg.sender is Admin or not
+   *@return bool
+   */
   function checkIsAdmin() public view returns(bool) {
       return AdminContract.isAdmin(msg.sender);
   }
-  // Define a function 'isThirdPL' to check this role
+  
+  /*function 'isThirdPL' to check _account is ThirdPL or not
+   *@param _account : is address metamask of ThirdPL
+   *@return bool
+   */
   function isThirdPL(address _account) public view returns (bool) {
     return thirdPLs.has(_account);
   }
 
-  // Define a function 'addThirdPL' that adds this role
+  /*function 'addThirdPL' to add a ThirdPL to chain
+   *@param _account : is address metamask of ThirdPL
+   *@param _name : is name of ThirdPL
+   *@param _company : is company of ThirdPL
+   *@param _identify : is identify of ThirdPL
+   *@param _lati : is latitude of ThirdPL
+   *@param _longt : is longitude of ThirdPL
+   */
   function addThirdPL(address _account, string memory _name, string memory _company,string memory _identify, string memory _lati, string memory _longt) public  {
     _addThirdPL(_account, _name, _company, _identify, _lati, _longt);
   }
 
-  // Define a function 'renounceThirdPL' to renounce this role
+  /*function 'renounceThirdPL' to remove a ThirdPL out chain
+   *@param _account : is address metamask of ThirdPL
+   */
   function renounceThirdPL(address _account) public {
     _removeThirdPL(_account);
   }
-    function getThirdPL(address _account) public view returns (address, string, string, string,string, string){
-       return thirdPLs.get(_account);
-    }
-  // Define an internal function '_addThirdPL' to add this role, called by 'addThirdPL'
+  
+  /*function 'getThirdPL' to get information a ThirdPL
+   *@param _account : is address metamask of ThirdPL
+   *@returns : account, name, company, identify, latitude, longitude
+   */
+  function getThirdPL(address _account) public view returns (address, string, string, string,string, string){
+    return thirdPLs.get(_account);
+  }
+  
+  /* Define an internal function '_addThirdPL' to add this role, called by 'addThirdPL'
+   *@param _account : is address metamask of ThirdPL
+   *@param _name : is name of ThirdPL
+   *@param _company : is company of ThirdPL
+   *@param _identify : is identify of ThirdPL
+   *@param _lati : is latitude of ThirdPL
+   *@param _longt : is longitude of ThirdPL
+   *@modifier onlyAdmin : check is msg.sender is admin or not
+   *@event LogFarmerAdded : log information ThirdPL in chain
+   */  
   function _addThirdPL(address _account, string memory _name, string memory _company,string memory _identify, string memory _lati, string memory _longt) internal onlyAdmin {
     thirdPLs.add(_account, _name, _company, _identify, _lati, _longt);
     emit LogThirdPLAdded(_account, _name, _company, _identify, _lati, _longt,now);
   }
 
-  // Define an internal function '_removeThirdPL' to remove this role, called by 'removeThirdPL'
+  /* Define an internal function '_removeThirdPL' to remove this role, called by 'removeThirdPL'
+   *@param _account : is address metamask of ThirdPL
+   *@modifier onlyAdmin : check is msg.sender is admin or not
+   *@event LogFarmerRemoved : log information ThirdPL in chain
+   */ 
   function _removeThirdPL(address _account) internal onlyAdmin {
     thirdPLs.remove(_account);
     emit LogThirdPLRemoved(_account, now);
