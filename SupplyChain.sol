@@ -1,114 +1,127 @@
 pragma solidity ^0.4.25;
 
+/*==========================================
+ =          Interface Ownable              =
+ ==========================================*/
 interface OwnableInterface {
-    function isOwner() external view returns (bool);
     function owner() external view returns (address);
-    function renounceOwnership() external;
-    function transferOwnership(address _newOwner) external;
 }
 
+/*==========================================
+ =          Interface Admin                =
+ ==========================================*/
 interface AdminInterface {
-    // function addAdmin(address _account) external;
-    // function removeAdmin(address _account) external;
     function isAdmin(address _account) external view returns (bool);
 }
 
+/*==========================================
+ =          Interface Farmer               =
+ ==========================================*/
 interface FarmerInterface {
     function isFarmer(address _account) external view returns (bool);
-    // function addFarmer(address _account, string _name, string _company, string _identify, string _lati, string _longt) external;
-    // function renounceFarmer(address _account) external;
-    // function getFammer(address _account) external view returns (address, string, string, string, string, string);
 }
 
+/*==========================================
+ =          Interface Retailer             =
+ ==========================================*/
 interface RetailerInterface {
     function isRetailer(address _account) external view returns (bool);
-    // function addRetailer(address _account, string   _name, string  _company, string  _identify, string  _lati, string  _longt) external;
-    // function renounceRetailer(address _account) external;
-    // function getRetailer(address _account) external view returns (address, string, string, string, string, string);
 }
 
+/*==========================================
+ =          Interface ThirdPL              =
+ ==========================================*/
 interface ThirdPLInterface {
     function isThirdPL(address _account) external view returns (bool);
-    // function addThirdPL(address _account, string   _name, string  _company, string  _identify, string  _lati, string  _longt) external;
-    // function renounceThirdPL(address _account) external;
-    // function getThirdPL(address _account) external view returns (address, string, string, string, string, string);
 }
 
+/*==========================================
+ =          Interface Consumer             =
+ ==========================================*/
 interface ConsumerInterface {
     function isConsumer(address _account) external view returns (bool);
-    // function addConsumer(address _account, string   _name, string  _company, string  _identify, string  _lati, string  _longt) external;
-    // function renounceConsumer(address _account) external;
-    // function getConsumer(address _account) external view returns (address, string, string, string, string, string);
 }
 
+/*==========================================
+ =        Interface Manufacturer           =
+ ==========================================*/
 interface ManufacturerInterface {
     function isManufacturer(address _account) external view returns (bool);
-    // function addManufacturer(address _account, string   _name, string  _company, string  _identify, string  _lati, string  _longt) external;
-    // function renounceManufacturer(address _account) external;
-    // function getManufacturer(address _account) external view returns (address, string, string, string, string, string);
 }
 
+/*==========================================
+ =         Interface Distributor           =
+ ==========================================*/
 interface DistributorInterface {
     function isDistributor(address _account) external view returns (bool);
-    // function addDistributor(address _account, string   _name, string  _company, string  _identify, string  _lati, string  _longt) external;
-    // function renounceDistributor(address _account) external;
-    // function getDistributor(address _account) external view returns (address, string, string, string, string, string);
 }
 
+/*==========================================
+=          Contract SupplyChain           =
+==========================================*/
 contract SupplyChain {
   
-  mapping (string => Product) products; // Define a public mapping 'products' that maps the UPC to an Product.
-  address[] public allContract;
+  mapping (string => Product) products;         // Define a public mapping 'products' that maps the UPC to an Product.
+  address[] public allContract;                 // Define a public array 'allContract' contain 8 address contract [ownable, admin, farmer, manufacturer, distributor, 3pl, retailer, consumer].
   
-  OwnableInterface public ownableContract;
-  AdminInterface public adminContract;
-  FarmerInterface public farmerContract;
-  RetailerInterface public retailerContract;
-  ThirdPLInterface public thirdPLContract;
-  ConsumerInterface public consumerContract;
-  ManufacturerInterface public manufacturerContract;
-  DistributorInterface public distributorContract;
+  OwnableInterface public ownableContract;              //Define interface: ownableContract
+  AdminInterface public adminContract;                  //Define interface: adminContract
+  FarmerInterface public farmerContract;                //Define interface: farmerContract
+  RetailerInterface public retailerContract;            //Define interface: retailerContract
+  ThirdPLInterface public thirdPLContract;              //Define interface: thirdPLContract
+  ConsumerInterface public consumerContract;            //Define interface: consumerContract
+  ManufacturerInterface public manufacturerContract;    //Define interface: manufacturerContract
+  DistributorInterface public distributorContract;      //Define interface: distributorContract
   
   // Define enum 'State' for product status with the following values:
   enum State { 
-    Harvested,  //FarmerRole
-    Processed,  //ManufacturerRole
-    Packed, //ManufacturerRole
-    Distributor, // DistributorRole
-    Retailer, //Retailer       
-    Shipped,  //Has ship for Consumer, 3PLRole   
-    Purchased    // Retailer
+    Harvested,          //Actor: FarmerRole
+    Processed,          //Actor: ManufacturerRole
+    Packed,             //Actor: ManufacturerRole
+    Distributor,        //Actor: DistributorRole
+    Retailer,           //Actor: Retailer       
+    Shipped,            //Actor: Has ship for Consumer, 3PLRole   
+    Purchased           //Actor: Retailer
   }
 
+  // Define struct 'Product' contain information for product:
   struct Product {
-    string    productID;  // Product ID potentially
-    string    sku;  // Stock Keeping Unit (SKU)
-    string    upc; // Universal Product Code (UPC), generated by the manufacturer, goes on the package, can be verified by the Consumer
-    string  productNotes; // Product Notes
-    uint    productPrice; // Product Price
+    string    productID;    // Product ID potentially
+    string    upc;          // Universal Product Code (UPC), generated by the manufacturer, goes on the package, can be verified by the Consumer
+    string  productNotes;   // Product Notes
+    uint    productPrice;   // Product Price
     
-    address ownerID;  // Metamask-Ethereum address of the current owner as the product moves through 8 stages
+    address ownerID;        // Metamask-Ethereum address of the current owner as the product moves through 7 stages
     address originFarmerID; // Metamask-Ethereum address of the Farmer
     address distributorID;  // Metamask-Ethereum address of the Distributor
-    address retailerID; // Metamask-Ethereum address of the Retailer
+    address retailerID;     // Metamask-Ethereum address of the Retailer
     address manufacturerID; // Metamask-Ethereum address of the manufacturer
-    address thirdPLID; // Metamask-Ethereum address of the thirdPL
-    address consumerID; // Metamask-Ethereum address of the Consumer
+    address thirdPLID;      // Metamask-Ethereum address of the thirdPL
+    address consumerID;     // Metamask-Ethereum address of the Consumer
     
-    State   productState;  // Product State as represented in the enum above
+    State productState;     // Product State as represented in the enum above
   }
-    // thêm address của actor 
-  event LogHarvested(string upc); //FarmerRole
-  event LogProcessed(string upc); // ManufacturerRole
-  event LogPacked(string upc); // ManufacturerRole
-  event LogDistributor(string upc); 
-  event LogRetailer(string upc);
-  event LogShipped(string upc);
-  event LogPurchased(string upc); // RetailerRole
-
-
-
-  // Define a modifer that verifies the Caller
+   
+  /*----------  START EVENT  ----------*/  
+  // Define a event to log infomation product at state Harvested
+  event LogHarvested(string indexed _id, string indexed _upc, string _name, address _owner, string _actor, State _state); //FarmerRole
+  // Define a event to log infomation product at state Processed
+  event LogProcessed(string indexed _id, string indexed _upc, string _name, address _owner, string _actor, State _state); // ManufacturerRole
+  // Define a event to log infomation product at state Packed
+  event LogPacked(string indexed _id, string indexed _upc, string _name, address _owner, string _actor, State _state); // ManufacturerRole
+  // Define a event to log infomation product at state Distributor
+  event LogDistributor(string indexed _id, string indexed _upc, string _name, address _owner, string _actor, State _state); 
+  // Define a event to log infomation product at state Retailer
+  event LogRetailer(string indexed _id, string indexed _upc, string _name, address _owner, string _actor, State _state);
+  // Define a event to log infomation product at state Shipped
+  event LogShipped(string indexed _id, string indexed _upc, string _name, address _owner, string _actor, State _state);
+  // Define a event to log infomation product at state Purchased
+  event LogPurchased(string indexed _id, string indexed _upc, string _name, address _owner, string _actor, State _state); // RetailerRole
+  /*----------  START EVENT  ----------*/
+  
+  /*----------  START MODIFIER  ----------*/
+  
+  // Define a modifier that checks account call function
   modifier verifyCaller (address _address) {
     require(msg.sender == _address,"Not verify"); 
     _;
@@ -122,77 +135,90 @@ contract SupplyChain {
 
   // Define a modifier that checks if an product.state of a upc is Processed
   modifier processed(string _upc) {
-    require(products[_upc].productState == State.Processed);
+    require(products[_upc].productState == State.Processed,"Not process yet");
     _;
   }
   
   // Define a modifier that checks if an product.state of a upc is Packed
   modifier packed(string _upc) {
-    require(products[_upc].productState == State.Packed);
+    require(products[_upc].productState == State.Packed,"Not packed yet");
     _;
   }
 
   // Define a modifier that checks if an product.state of a upc is ForSale
   modifier distributor(string _upc) {
-    require(products[_upc].productState == State.Distributor);
+    require(products[_upc].productState == State.Distributor,"Product not to distributor yet");
     _;
   }
 
   // Define a modifier that checks if an product.state of a upc is Sold
   modifier retailer(string _upc) {
-    require(products[_upc].productState == State.Retailer);
+    require(products[_upc].productState == State.Retailer, "Product not to retailer yet");
     _;
   }
   
   // Define a modifier that checks if an product.state of a upc is Shipped
   modifier shipped(string _upc) {
-    require(products[_upc].productState == State.Shipped);
-    _;
-  }
-
-  modifier roleOwnerMain() {
-    require(ownableContract.isOwner(),"Account not is owner");
+    require(products[_upc].productState == State.Shipped, "Product not to shipped yet");
     _;
   }
   
-  modifier isFarmerMain(address _account) {
-    require(farmerContract.isFarmer(_account),"Account not is Farmer");
-    _;
-  }
-  
-  modifier isManufacturerMain(address _account) {
-    require(manufacturerContract.isManufacturer(_account),"Account not is Manufacturer");
-    _;
-  }
-  
-  modifier isDistributorMain(address _account) {
-    require(distributorContract.isDistributor(_account),"Account not is Distributor");
-    _;
-  }
-  
-  modifier isThirdPLMain(address _account) {
-    require(thirdPLContract.isThirdPL(_account),"Account not is ThirdPL");
-    _;
-  }
-  
-  modifier isRetailerMain(address _account) {
-    require(retailerContract.isRetailer(_account),"Account not is Retailer");
-    _;
-  }
-   
-  modifier isConsumerMain(address _account) {
-    require(consumerContract.isConsumer(_account),"Account not is Consumer");
-    _;
-  } 
-    
   // Define a modifier that checks if an product.state of a upc is Purchased
   modifier purchased(string _upc) {
     require(products[_upc].productState == State.Purchased);
     _;
   }
   
+  // Define a modifier that checks Account is owner
+  modifier roleOwnerMain() {
+    require(ownableContract.owner() == msg.sender,"Account not is owner");
+    _;
+  }
   
+  // Define a modifier that checks Account is Farmer
+  modifier isFarmerMain(address _account) {
+    require(farmerContract.isFarmer(_account),"Account not is Farmer");
+    _;
+  }
   
+  // Define a modifier that checks Account is Manufacturer
+  modifier isManufacturerMain(address _account) {
+    require(manufacturerContract.isManufacturer(_account),"Account not is Manufacturer");
+    _;
+  }
+  
+  // Define a modifier that checks Account is Distributor
+  modifier isDistributorMain(address _account) {
+    require(distributorContract.isDistributor(_account),"Account not is Distributor");
+    _;
+  }
+  
+  // Define a modifier that checks Account is ThirdPL
+  modifier isThirdPLMain(address _account) {
+    require(thirdPLContract.isThirdPL(_account),"Account not is ThirdPL");
+    _;
+  }
+  
+  // Define a modifier that checks Account is Retailer
+  modifier isRetailerMain(address _account) {
+    require(retailerContract.isRetailer(_account),"Account not is Retailer");
+    _;
+  }
+  
+  // Define a modifier that checks Account is Consumer 
+  modifier isConsumerMain(address _account) {
+    require(consumerContract.isConsumer(_account),"Account not is Consumer");
+    _;
+  } 
+  
+  /*----------  END MODIFIER  ----------*/
+  
+  /*constructor 'joinMainNetwork' to join 8 address contract
+   *@param _contract : is array 8 address contract
+   *@modifier roleOwnerMain : check is msg.sender is owner of contract
+   *[ownable, admin, farmer, manufacturer, distributor, 3pl, retailer, consumer]
+   * dev : ["","","","","","","",""]
+   */
   constructor(address[8] _contract) public  {
      ownableContract = OwnableInterface(_contract[0]);
      adminContract = AdminInterface(_contract[1]);
@@ -204,7 +230,61 @@ contract SupplyChain {
      consumerContract = ConsumerInterface(_contract[7]);
      allContract = _contract;
   }
-  //[ownable, admin, farmer, manufacturer, distributor, 3pl, retailer, consumer]
+  
+  /*function 'isFarmer' to check if account is Farmer 
+   *@param _account : is address account need to check
+   *@return bool 
+   */
+  function isFarmer(address _account) public view returns (bool) {
+      return farmerContract.isFarmer(_account);
+  }
+  
+   /*function 'isManufacturer' to check if account is Manufacturer 
+   *@param _account : is address account need to check
+   *@return bool 
+   */
+  function isManufacturer(address _account) public view returns (bool) {
+      return manufacturerContract.isManufacturer(_account);
+  }
+  
+   /*function 'isDistributor' to check if account is Distributor 
+   *@param _account : is address account need to check
+   *@return bool 
+   */
+  function isDistributor(address _account) public view returns (bool) {
+      return distributorContract.isDistributor(_account);
+  }
+  
+  /*function 'isThirdPL' to check if account is ThirdPL 
+   *@param _account : is address account need to check
+   *@return bool 
+   */
+  function isThirdPL(address _account) public view returns (bool) {
+      return thirdPLContract.isThirdPL(_account);
+  }
+  
+  /*function 'isRetailer' to check if account is Retailer 
+   *@param _account : is address account need to check
+   *@return bool 
+   */
+  function isRetailer(address _account) public view returns (bool) {
+      return retailerContract.isRetailer(_account);
+  }
+  
+   /*function 'isConsumer' to check if account is consumer 
+   *@param _account : is address account need to check
+   *@return bool 
+   */
+  function isConsumer(address _account) public view returns (bool) {
+      return consumerContract.isConsumer(_account);
+  }
+
+  /*function 'joinMainNetwork' to join 8 address contract
+   *@param _contract : is array 8 address contract
+   *@modifier roleOwnerMain : check is msg.sender is owner of contract
+   *[ownable, admin, farmer, manufacturer, distributor, 3pl, retailer, consumer]
+   * dev : ["","","","","","","",""]
+   */
   function joinMainNetwork(address[8] _contract)
     public
     roleOwnerMain
@@ -220,6 +300,11 @@ contract SupplyChain {
      allContract = _contract;
   }
   
+  /*function 'joinOwnerNetwork' to join address contract of OwnerContract
+   *@param _contract : is address contract of  OwnerContract
+   *@modifier roleOwnerMain : check is msg.sender is owner of contract
+   *[ownable, admin, farmer, manufacturer, distributor, 3pl, retailer, consumer]
+   */
   function joinOwnerNetwork(address _contract)
     public
     roleOwnerMain
@@ -228,6 +313,11 @@ contract SupplyChain {
      allContract[0] = _contract;
   }
   
+  /*function 'joinAdminNetwork' to join address contract of AdminContract
+   *@param _contract : is address contract of  AdminContract
+   *@modifier roleOwnerMain : check is msg.sender is owner of contract
+   *[ownable, admin, farmer, manufacturer, distributor, 3pl, retailer, consumer]
+   */
   function joinAdminNetwork(address _contract)
     public
     roleOwnerMain
@@ -236,6 +326,11 @@ contract SupplyChain {
      allContract[1] = _contract;
   }
   
+  /*function 'joinFarmerNetwork' to join address contract of FarmerContract
+   *@param _contract : is address contract of  FarmerContract
+   *@modifier roleOwnerMain : check is msg.sender is owner of contract
+   *[ownable, admin, farmer, manufacturer, distributor, 3pl, retailer, consumer]
+   */
   function joinFarmerNetwork(address _contract)
     public
     roleOwnerMain
@@ -244,6 +339,11 @@ contract SupplyChain {
      allContract[2] = _contract;
   }
   
+  /*function 'joinManufacturerNetwork' to join address contract of ManufacturerContract
+   *@param _contract : is address contract of  ManufacturerContract
+   *@modifier roleOwnerMain : check is msg.sender is owner of contract
+   *[ownable, admin, farmer, manufacturer, distributor, 3pl, retailer, consumer]
+   */
   function joinManufacturerNetwork(address _contract)
     public
     roleOwnerMain
@@ -252,6 +352,11 @@ contract SupplyChain {
       allContract[3] = _contract;
   }
   
+  /*function 'joinDistributorNetwork' to join address contract of DistributorContract
+   *@param _contract : is address contract of  DistributorLContract
+   *@modifier roleOwnerMain : check is msg.sender is owner of contract
+   *[ownable, admin, farmer, manufacturer, distributor, 3pl, retailer, consumer]
+   */
   function joinDistributorNetwork(address _contract)
     public
     roleOwnerMain
@@ -260,6 +365,11 @@ contract SupplyChain {
       allContract[4] = _contract;
   }
   
+   /*function 'joinThirdPLNetwork' to join address contract of ThirdPLContract
+   *@param _contract : is address contract of  ThirdPLContract
+   *@modifier roleOwnerMain : check is msg.sender is owner of contract
+   *[ownable, admin, farmer, manufacturer, distributor, 3pl, retailer, consumer]
+   */
   function joinThirdPLNetwork(address _contract)
     public
     roleOwnerMain
@@ -268,6 +378,11 @@ contract SupplyChain {
       allContract[5] = _contract;
   }
   
+  /*function 'joinRetailerNetwork' to join address contract of RetailerContract
+   *@param _contract : is address contract of  RetailerContract
+   *@modifier roleOwnerMain : check is msg.sender is owner of contract
+   *[ownable, admin, farmer, manufacturer, distributor, 3pl, retailer, consumer]
+   */
   function joinRetailerNetwork(address _contract)
     public
     roleOwnerMain
@@ -276,6 +391,11 @@ contract SupplyChain {
       allContract[6] = _contract;
   }
   
+  /*function 'joinConsumerNetwork' to join address contract of consumerContract
+   *@param _contract : is address contract of  consumerContract
+   *@modifier roleOwnerMain : check is msg.sender is owner of contract
+   *[ownable, admin, farmer, manufacturer, distributor, 3pl, retailer, consumer]
+   */
   function joinConsumerNetwork(address _contract)
     public
     roleOwnerMain
@@ -288,19 +408,28 @@ contract SupplyChain {
   function kill() public roleOwnerMain {
     selfdestruct(ownableContract.owner());
   }
-
+  
+  /*function 'retreiveAllContract' to get all 8 address contract 
+   *@return array
+   */
   function retreiveAllContract() public view returns (address[]){
         return allContract;
-    }
-  // Define a function 'harvestproduct' that allows a farmer to mark an product 'Harvested'
-  function harvestProduct(string _upc,string _sku, address _originFarmerID,  string  _productNotes) public isFarmerMain(msg.sender)
+  }
+
+  /*function harvest Product
+   *@param _upc : is upc of product.
+   *@param _productNotes : is name of product.
+   *@param _originFarmerID : is aaddress metamask Farmer.
+   *@param _productID : is ID of product.
+   *@modifier isFarmerMain : Call modifier to check Farmer has account in system or not.
+   */
+  function harvestProduct(string _productID,string _upc, address _originFarmerID,  string  _productNotes) public isFarmerMain(msg.sender)
   {
     products[_upc] = Product({
-      sku: _sku,
       upc: _upc,
       ownerID: _originFarmerID,
       originFarmerID: _originFarmerID,
-      productID: "1",
+      productID: _productID,
       productNotes: _productNotes,
       productPrice: 0,
       productState: State.Harvested,
@@ -311,112 +440,134 @@ contract SupplyChain {
       consumerID: address(0) 
     });
     
-    // Emit the appropriate event
-    emit LogHarvested(_upc);
+    emit LogHarvested(_productID, _upc, _productNotes, _originFarmerID, "farmer", State.Harvested);
   }
 
-
+  /*function process Product
+   *@param _upc : is upc of product.
+   *@modifier harvested : Call modifier to check if upc has passed previous supply chain stage
+   *@modifier isManufacturerMain : Call modifier to check manufacturer has account in system or not.
+   *@modifier verifyCaller : Call modifier to verify caller of this function is manufacturer
+   */
   function processProduct(string _upc) public 
-  // Call modifier to check if upc has passed previous supply chain stage
-  harvested(_upc)
-  isManufacturerMain(msg.sender)
-  // Call modifier to verify caller of this function
+    harvested(_upc)
+    isManufacturerMain(msg.sender)
     verifyCaller(products[_upc].manufacturerID) 
   {
-    // Update the appropriate fields
-    products[_upc].ownerID = msg.sender;
-    products[_upc].productState = State.Processed;
-    products[_upc].manufacturerID = msg.sender;
-    // Emit the appropriate event
-    emit LogProcessed(_upc);
+    Product storage product = products[_upc];
+    
+    product.ownerID = msg.sender;
+    product.productState = State.Processed;
+    product.manufacturerID = msg.sender;
+  
+    emit LogProcessed(product.productID, _upc, product.productNotes, msg.sender, "manufacturer", State.Processed);
   }
 
-  // Define a function 'packproduct' that allows a farmer to mark an product 'Packed'
+   /*function pack Product
+   *@param _upc : is upc of product.
+   *@param _price : is price of product.
+   *@param _distributorID : is address metamask of distributor in next state.
+   *@modifier processed : Call modifier to check if upc has passed previous supply chain stage
+   *@modifier isManufacturerMain : Call modifier to check manufacturer has account in system or not.
+   *@modifier verifyCaller : Call modifier to verify caller of this function is manufacturer
+   */
   function packProduct(string _upc, uint _price, address _distributorID) public 
-  // Call modifier to check if upc has passed previous supply chain stage
   processed(_upc)
   isManufacturerMain(msg.sender)
-  // Call modifier to verify caller of this function
   verifyCaller(products[_upc].manufacturerID) 
   {
-    // Update the appropriate fields
-    products[_upc].productState = State.Packed;
-    products[_upc].productPrice = _price;
-    products[_upc].distributorID = _distributorID;
-    // Emit the appropriate event
-    emit LogPacked(_upc);
+    Product storage product = products[_upc];
     
+    product.productState = State.Packed;
+    product.productPrice = _price;
+    product.distributorID = _distributorID;
+    
+    emit LogPacked(product.productID, _upc, product.productNotes, msg.sender, "distributor", State.Packed);
   }
 
-  // Define a function 'sellproduct' that allows a farmer to mark an product 'ForSale'
+  /*function distributor Product
+   *@param _upc : is upc of product.
+   *@param _retailerID : is address metamask of retailer in next state.
+   *@modifier packed : Call modifier to check if upc has passed previous supply chain stage
+   *@modifier isDistributorMain : Call modifier to check Distributor has account in system or not.
+   *@modifier verifyCaller : Call modifier to verify caller of this function is Distributor
+   */
   function distributorProduct(string _upc, address _retailerID) public 
-  // Call modifier to check if upc has passed previous supply chain stage
   packed(_upc)
   isDistributorMain(msg.sender)
-  // Call modifier to verify caller of this function
   verifyCaller(products[_upc].distributorID)
   {
-    // Update the appropriate fields
-    products[_upc].ownerID = msg.sender;
-    products[_upc].productState = State.Distributor;
-    products[_upc].retailerID = _retailerID;
-    // Emit the appropriate event
-    emit LogDistributor(_upc);
+    Product storage product = products[_upc];
+     
+    product.ownerID = msg.sender;
+    product.productState = State.Distributor;
+    product.retailerID = _retailerID;
+    
+    emit LogDistributor(product.productID, _upc, product.productNotes, msg.sender, "manufacturer", State.Distributor);
   }
 
-  // Define a function 'buyproduct' that allows the disributor to mark an product 'Sold'
-  // Use the above defined modifiers to check if the product is available for sale, if the buyer has paid enough, 
-  // and any excess ether sent is refunded back to the buyer
+  /*function retailer Product
+   *@param _upc : is upc of product.
+   *@param _thirdPLID : is address metamask of thirdPL in next state.
+   *@modifier distributor : Call modifier to check if upc has passed previous supply chain stage
+   *@modifier isRetailerMain : Call modifier to check Retailer has account in system or not.
+   *@modifier verifyCaller : Call modifier to verify caller of this function is Retailer
+   */
   function retailerProduct(string _upc, address _thirdPLID)  public  
-  // Call modifier to check if upc has passed previous supply chain stage
   distributor(_upc)
   isRetailerMain(msg.sender)
   verifyCaller(products[_upc].retailerID)
   {
-    // Update the appropriate fields - ownerID, distributorID, productState
-    products[_upc].ownerID = msg.sender;
-    products[_upc].thirdPLID = _thirdPLID;
-    products[_upc].productState = State.Retailer;
+    Product storage product = products[_upc];
     
-    // emit the appropriate event
-    emit LogRetailer(_upc);
+    product.ownerID = msg.sender;
+    product.thirdPLID = _thirdPLID;
+    product.productState = State.Retailer;
+    
+    emit LogRetailer(product.productID, _upc, product.productNotes, msg.sender, "retailer", State.Retailer);
   }
 
-  // Define a function 'shipproduct' that allows the distributor to mark an product 'Shipped'
-  // Use the above modifers to check if the product is sold
+  /*function ship Product
+   *@param _upc : is upc of product.
+   *@modifier shipped : Call modifier to check if upc has passed previous supply chain stage
+   *@modifier isThirdPLMain : Call modifier to check ThirdPL has account in system or not.
+   *@modifier verifyCaller : Call modifier to verify caller of this function is ThirdPL
+   */
   function shipproduct(string _upc) public 
-  // Call modifier to check if upc has passed previous supply chain stage
   shipped(_upc)
   isThirdPLMain(msg.sender)
-  // Call modifier to verify caller of this function
   verifyCaller(products[_upc].thirdPLID)
   {
-    // Update the appropriate fields
-    products[_upc].productState = State.Shipped;
+    Product storage product = products[_upc];
     
-    // Emit the appropriate event
-    emit LogShipped(_upc);
+    product.productState = State.Shipped;
+    
+    emit LogShipped(product.productID, _upc, product.productNotes, msg.sender, "ship", State.Shipped);
   }
 
 
-  // Define a function 'purchaseproduct' that allows the consumer to mark an product 'Purchased'
-  // Use the above modifiers to check if the product is received
+  /*function purchased Product
+   *@param _upc : is upc of product.
+   *@param _consumerID : is address metamask of consumer in next state.
+   *@modifier shipped : Call modifier to check if upc has passed previous supply chain stage
+   *@modifier isRetailerMain : Call modifier to check Retailer has account in system or not.
+   *@modifier verifyCaller : Call modifier to verify caller of this function is Retailer
+   */
     function purchaseProduct(
         string _upc, address _consumerID
     )  
     public 
     isRetailerMain(msg.sender)
-    shipped(_upc) // Call modifier to check if upc has passed previous supply chain stage
+    shipped(_upc) 
     verifyCaller(products[_upc].retailerID)
-    // Access Control List enforced by calling Smart Contract / DApp
     {
-        // Update the appropriate fields - ownerID, consumerID, productState
-        products[_upc].ownerID = _consumerID;
-        products[_upc].consumerID = _consumerID;
-        products[_upc].productState = State.Purchased;
+        Product storage product = products[_upc];
         
-        // Emit the appropriate event
-        emit LogPurchased(_upc);
+        product.ownerID = _consumerID;
+        product.consumerID = _consumerID;
+        product.productState = State.Purchased;
+        
+        emit LogPurchased(product.productID, _upc, product.productNotes, msg.sender, "consumer", State.Purchased);
     }
 }
 

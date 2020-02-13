@@ -1,7 +1,9 @@
 pragma solidity ^0.4.24;
 //0xa646C5af0a0425F51cbAEEa84d182adD98FAfb4F
-// farmer được admin chấp nhận thì mới thêm vào hệ thống 
 
+/*==========================================
+ =          Library Roles                  =
+ ==========================================*/
 library Roles {
     struct Role {
         mapping (address => User) bearer;
@@ -91,69 +93,115 @@ library Roles {
 
 }
 
+/*==========================================
+ =          Interface Admin                =
+ ==========================================*/
 interface AdminInterface {
     function isAdmin(address _account) view external returns(bool);
 }
 
-// Define a contract 'FarmerRole' to manage this role - add, remove, check
+/*==========================================
+ =         Contract FarmerRole             =
+ ==========================================*/
 contract FarmerRole {
   using Roles for Roles.Role;
-  AdminInterface public AdminContract;
+  AdminInterface public AdminContract;      //Define interface: adminContract
   
+  /*----------  START EVENT  ----------*/ 
   // Define 2 events, one for Adding, and other for Removing
   event LogFarmerAdded(address indexed _account,string _name, string _company, string _identify, string _lat, string _longt, uint _timeAdd);
   event LogFarmerRemoved(address indexed _account,uint _timeAdd);
-
+  /*----------  END EVENT  ----------*/ 
+  
   // Define a struct 'farmers' by inheriting from 'Roles' library, struct Role
   Roles.Role private farmers;
 
-  // In the constructor make the address that deploys this contract the 1st farmer
+  /*constructor to join address contract of AdminContract
+   *@param _contract : is address contract of  AdminContract
+   */
   constructor(address _contract) public {
       AdminContract = AdminInterface(_contract);
   }
 
-  // Define a modifier that checks to see if msg.sender has the appropriate role
+  /*----------  START MODIFIER  ----------*/
+  // Define a modifier that checks to see if msg.sender is Admin
   modifier onlyAdmin() {
     require(AdminContract.isAdmin(msg.sender),"Not is admin");
     _;
   }
+  /*----------  END MODIFIER  ----------*/
   
+  /*function 'joinNetwork' to join address contract of AdminContract
+   *@param _contract : is address contract of  AdminContract
+   */
   function joinNetwork(address _contract)
     public
   {
       AdminContract = AdminInterface(_contract);
   }
   
+  /*function 'checkIsAdmin' to check msg.sender is Admin or not
+   *@return bool
+   */
   function checkIsAdmin() public view returns(bool) {
       return AdminContract.isAdmin(msg.sender);
   }
   
-  // Define a function 'isFarmer' to check this role
+  /*function 'isFarmer' to check _account is Farmer or not
+   *@param _account : is address metamask of Farmer
+   *@return bool
+   */
   function isFarmer(address _account) public view returns (bool) {
     return farmers.has(_account);
   }
 
-  // Define a function 'addFarmer' that adds this role
+  /*function 'addFarmer' to add a farmer to chain
+   *@param _account : is address metamask of Farmer
+   *@param _name : is name of Farmer
+   *@param _company : is company of Farmer
+   *@param _identify : is identify of Farmer
+   *@param _lati : is latitude of Farmer
+   *@param _longt : is longitude of Farmer
+   */
   function addFarmer(address _account, string memory  _name, string memory _company, string memory _identify, string memory _lati, string memory _longt) public  {
     _addFarmer(_account, _name, _company, _identify, _lati, _longt);
   }
 
-  // Define a function 'renounceFarmer' to renounce this role
+  /*function 'addFarmer' to remove a farmer out chain
+   *@param _account : is address metamask of Farmer
+   */
   function renounceFarmer(address _account) public {
     _removeFarmer(_account);
   }
   
+  /*function 'getFammer' to get information a farmer
+   *@param _account : is address metamask of Farmer
+   *@returns : account, name, company, identify, latitude, longitude
+   */
   function getFammer(address _account) public view returns (address, string, string, string, string, string){
      return farmers.get(_account);
   }
-    
-  // Define an internal function '_addFarmer' to add this role, called by 'addFarmer'
+   
+  /* Define an internal function '_addFarmer' to add this role, called by 'addFarmer'
+   *@param _account : is address metamask of Farmer
+   *@param _name : is name of Farmer
+   *@param _company : is company of Farmer
+   *@param _identify : is identify of Farmer
+   *@param _lati : is latitude of Farmer
+   *@param _longt : is longitude of Farmer
+   *@modifier onlyAdmin : check is msg.sender is admin or not
+   *@event LogFarmerAdded : log information Farmer in chain
+   */  
   function _addFarmer(address _account, string memory  _name, string memory _company, string memory _identify, string memory _lati, string memory _longt) internal onlyAdmin {
     farmers.add(_account, _name, _company, _identify, _lati, _longt);
     emit LogFarmerAdded(_account, _name, _company, _identify, _lati, _longt, now);
   }
 
-  // Define an internal function '_removeFarmer' to remove this role, called by 'removeFarmer'
+  /* Define an internal function '_removeFarmer' to remove this role, called by 'removeFarmer'
+   *@param _account : is address metamask of Farmer
+   *@modifier onlyAdmin : check is msg.sender is admin or not
+   *@event LogFarmerRemoved : log information Farmer in chain
+   */ 
   function _removeFarmer(address _account) internal onlyAdmin {
     farmers.remove(_account);
     emit LogFarmerRemoved(_account, now);
