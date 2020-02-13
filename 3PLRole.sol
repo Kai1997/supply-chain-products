@@ -1,5 +1,5 @@
 pragma solidity ^0.4.24;
-
+// third : 0x8aCCa2d7316E1d0C17c2105e91509aba226ddb10
 library Roles {
     struct Role {
         mapping (address => User) bearer;
@@ -120,7 +120,9 @@ contract ThirdPLRole {
   {
       AdminContract = AdminInterface(_contract);
   }
-
+  function checkIsAdmin() public view returns(bool) {
+      return AdminContract.isAdmin(msg.sender);
+  }
   // Define a function 'isThirdPL' to check this role
   function isThirdPL(address _account) public view returns (bool) {
     return thirdPLs.has(_account);
@@ -132,8 +134,8 @@ contract ThirdPLRole {
   }
 
   // Define a function 'renounceThirdPL' to renounce this role
-  function renounceThirdPL() public {
-    _removeThirdPL(msg.sender);
+  function renounceThirdPL(address _account) public {
+    _removeThirdPL(_account);
   }
     function getThirdPL(address _account) public view returns (address, string, string, string,string, string){
        return thirdPLs.get(_account);
