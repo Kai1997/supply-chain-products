@@ -1,12 +1,13 @@
 pragma solidity ^0.4.25;
 
-
+//0x4eBDF6F46b44cBD8607C6Ef35BC0F689B854a7ef
 /**
  * @title Admin
  */
 
 interface OwnableInterface {
     function isOwner() external view returns (bool);
+     function owner() external view returns (address);
 }
 
 contract Admins {
@@ -19,14 +20,17 @@ contract Admins {
     }
     
     modifier roleOwner() {
-        require(OwnableContract.isOwner(),"Account not is owner");
+        require(OwnableContract.owner() == msg.sender,"Account not is owner");
         _;
     }
     
     modifier validateAccount(address _account) {
         require(_account != address(0),"Account not exist");
-        require(!has(_account),"Account not register");
         _;
+    }
+    
+    function getOwner() public view returns (address) {
+        return OwnableContract.owner();
     }
   /**
    * @dev give an account access to this role
@@ -38,6 +42,7 @@ contract Admins {
     
     }
   function addAdmin(address _account) public roleOwner validateAccount(_account) {
+    require(!has(_account),"Account registered");
     admins[_account] = true;
   }
 
@@ -45,6 +50,7 @@ contract Admins {
    * @dev remove an account's access to this role
    */
   function removeAdmin(address _account) roleOwner validateAccount(_account) public {
+    require(has(_account),"Account not register");
     admins[_account] = false;
   }
   

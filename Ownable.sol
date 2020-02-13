@@ -1,5 +1,5 @@
 pragma solidity ^0.4.24;
-
+// 0x789F7D9451872c3b1414DB11483AAfd0cA389102
 // Provides basic authorization control
 contract Ownable {
     address private origOwner;
@@ -8,7 +8,7 @@ contract Ownable {
     event LogSetOwner(address indexed _oldOwner, address indexed _newOwner);
 
     /// Assign the contract to an owner
-    constructor () internal {
+    constructor () public {
         origOwner = msg.sender;
         emit LogSetOwner(address(0), origOwner);
     }
