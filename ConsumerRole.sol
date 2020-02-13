@@ -1,5 +1,5 @@
 pragma solidity ^0.4.24;
-
+// con : 0x82B8c41919cDad2fc8Ee835f2192363EaBcA2452
 library Roles {
     struct Role {
         mapping (address => User) bearer;
@@ -120,7 +120,9 @@ contract ConsumerRole {
   {
       AdminContract = AdminInterface(_contract);
   }
-
+  function checkIsAdmin() public view returns(bool) {
+      return AdminContract.isAdmin(msg.sender);
+  }
   // Define a function 'isConsumer' to check this role
   function isConsumer(address _account) public view returns (bool) {
     return consumers.has(_account);
@@ -132,8 +134,8 @@ contract ConsumerRole {
   }
 
   // Define a function 'renounceConsumer' to renounce this role
-  function renounceConsumer() public  {
-    _removeConsumer(msg.sender);
+  function renounceConsumer(address _account) public  {
+    _removeConsumer(_account);
   }
     function getConsumer(address _account) public view returns (address, string, string, string,string, string){
        return consumers.get(_account);
