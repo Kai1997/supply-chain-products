@@ -167,7 +167,7 @@ contract FarmerRole {
     _addFarmer(_account, _name, _company, _identify, _lati, _longt);
   }
 
-  /*function 'addFarmer' to remove a farmer out chain
+  /*function 'renounceFarmer' to remove a farmer out chain
    *@param _account : is address metamask of Farmer
    */
   function renounceFarmer(address _account) public {

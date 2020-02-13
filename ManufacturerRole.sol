@@ -1,5 +1,9 @@
 pragma solidity ^0.4.24;
 // manu : 0xD57b5e5C2A69e653b51103E81Ba50b9f9C77650b
+
+/*==========================================
+ =          Library Roles                  =
+ ==========================================*/
 library Roles {
     struct Role {
         mapping (address => User) bearer;
@@ -89,66 +93,115 @@ library Roles {
 
 }
 
+/*==========================================
+ =          Interface Admin                =
+ ==========================================*/
 interface AdminInterface {
     function isAdmin(address _account) view external returns(bool);
 }
 
-// Define a contract 'Manufacturer' to manage this role - add, remove, check
+/*==========================================
+ =          Contract Manufacturer          =
+ ==========================================*/
 contract Manufacturer {
   using Roles for Roles.Role;
   AdminInterface public AdminContract;
   
+  /*----------  START EVENT  ----------*/ 
   // Define 2 events, one for Adding, and other for Removing
   event LogManufacturerAdded(address indexed _account, string _name, string _company, string _identify, string _lat, string _longt, uint _timeAdd);
   event LogManufacturerRemoved(address indexed _account, uint _timeAdd);
-
+  /*----------  END EVENT  ----------*/ 
+  
   // Define a struct 'manufacturers' by inheriting from 'Roles' library, struct Role
   Roles.Role private manufacturers;
 
+  /*constructor to join address contract of AdminContract
+   *@param _contract : is address contract of  AdminContract
+   */
   constructor(address _contract) public {
       AdminContract = AdminInterface(_contract);
   }
 
+  /*----------  START MODIFIER  ----------*/
   // Define a modifier that checks to see if msg.sender has the appropriate role
   modifier onlyAdmin() {
     require(AdminContract.isAdmin(msg.sender),"Not is admin");
     _;
   }
+  /*----------  END MODIFIER  ----------*/
   
+  /*function 'joinNetwork' to join address contract of AdminContract
+   *@param _contract : is address contract of  AdminContract
+   */
   function joinNetwork(address _contract)
     public
   {
       AdminContract = AdminInterface(_contract);
   }
-
+  
+  /*function 'checkIsAdmin' to check msg.sender is Admin or not
+   *@return bool
+   */
   function checkIsAdmin() public view returns(bool) {
       return AdminContract.isAdmin(msg.sender);
   }
   
-  // Define a function 'isManufacturer' to check this role
+  /*function 'isManufacturer' to check _account is Manufacturer or not
+   *@param _account : is address metamask of Manufacturer
+   *@return bool
+   */
   function isManufacturer(address _account) public view returns (bool) {
     return manufacturers.has(_account);
   }
 
-  // Define a function 'addManufacturer' that adds this role
+  /*function 'addManufacturer' to add a Manufacturer to chain
+   *@param _account : is address metamask of Manufacturer
+   *@param _name : is name of Manufacturer
+   *@param _company : is company of Manufacturer
+   *@param _identify : is identify of Manufacturer
+   *@param _lati : is latitude of Manufacturer
+   *@param _longt : is longitude of Manufacturer
+   */
   function addManufacturer(address _account, string memory  _name, string memory _company, string memory _identify, string memory _lati, string memory _longt) public  {
     _addManufacturer(_account, _name, _company, _identify, _lati, _longt);
   }
 
-  // Define a function 'renounceManufacturer' to renounce this role
+  /*function 'renounceManufacturer' to remove a Manufacturer out chain
+   *@param _account : is address metamask of Manufacturer
+   */
   function renounceManufacturer(address _account) public {
     _removeManufacturer(_account);
   }
+  
+  /*function 'getManufacturer' to get information a Manufacturer
+   *@param _account : is address metamask of Manufacturer
+   *@returns : account, name, company, identify, latitude, longitude
+   */
   function getManufacturer(address _account) public view returns (address, string, string, string, string, string){
    return manufacturers.get(_account);
   }
-  // Define an internal function '_addManufacturer' to add this role, called by 'addManufacturer'
+  
+  /* Define an internal function '_addManufacturer' to add this role, called by 'addManufacturer'
+   *@param _account : is address metamask of Manufacturer
+   *@param _name : is name of Manufacturer
+   *@param _company : is company of Manufacturer
+   *@param _identify : is identify of Manufacturer
+   *@param _lati : is latitude of Manufacturer
+   *@param _longt : is longitude of Manufacturer
+   *@modifier onlyAdmin : check is msg.sender is admin or not
+   *@event LogFarmerAdded : log information Manufacturer in chain
+   */ 
   function _addManufacturer(address _account, string memory _name, string memory _company,string memory _identify, string memory _lati, string memory _longt) internal onlyAdmin {
     manufacturers.add(_account, _name, _company, _identify, _lati, _longt);
     emit LogManufacturerAdded(_account, _name, _company, _identify, _lati, _longt, now);
   }
 
-  // Define an internal function '_removeManufacturer' to remove this role, called by 'removeManufacturer'
+  /* Define an internal function '_removeManufacturer' to remove this role, called by 'removeManufacturer'
+   *@param _account : is address metamask of Manufacturer
+   *@modifier onlyAdmin : check is msg.sender is admin or not
+   *@event LogFarmerRemoved : log information Manufacturer in chain
+   */ 
   function _removeManufacturer(address _account) internal onlyAdmin{
     manufacturers.remove(_account);
     emit LogManufacturerRemoved(_account,now);
