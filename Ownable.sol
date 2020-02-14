@@ -1,14 +1,19 @@
 pragma solidity ^0.4.24;
-// 0x789F7D9451872c3b1414DB11483AAfd0cA389102
-// Provides basic authorization control
+// 0x25f96c86f6d9529178f3Acfd136Ee60C54118685
+
+/*==========================================
+ =             Contract Ownable            =
+ =   Provides basic authorization control  =
+ ==========================================*/
 contract Ownable {
     address private origOwner;
-
+    bool private statusApp;
     // Define an Event
     event LogSetOwner(address indexed _oldOwner, address indexed _newOwner);
 
     /// Assign the contract to an owner
     constructor () public {
+        statusApp = true;
         origOwner = msg.sender;
         emit LogSetOwner(address(0), origOwner);
     }
@@ -18,25 +23,41 @@ contract Ownable {
         return origOwner;
     }
 
+    ///function get status dapp
+    function getStatus() public view onlyOwner returns(bool) {
+        return statusApp;
+    }
+
+    ///function change status dapp : active or deactive
+    function changeStatusDapp() public onlyOwner  {
+        statusApp = !statusApp;
+    }
+    
     /// Define a function modifier 'onlyOwner'
     modifier onlyOwner() {
         require(isOwner(),"Only owner");
         _;
     }
 
+    /// Define a function modifier 'onlyActive'
+    modifier onlyActive() {
+        require(statusApp,"Dapp not active");
+        _;
+    }
+    
     /// Check if the calling address is the owner of the contract
     function isOwner() public view returns (bool) {
         return msg.sender == origOwner;
     }
 
     /// Define a function to renounce ownerhip
-    function renounceOwnership() public onlyOwner {
+    function renounceOwnership() public onlyOwner onlyActive {
         emit LogSetOwner(origOwner, address(0));
         origOwner = address(0);
     }
 
     /// Define a public function to transfer ownership
-    function transferOwnership(address _newOwner) public onlyOwner {
+    function transferOwnership(address _newOwner) public onlyOwner onlyActive {
         _transferOwnership(_newOwner);
     }
 
