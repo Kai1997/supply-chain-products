@@ -1,5 +1,5 @@
 pragma solidity ^0.4.24;
-// con : 
+// con : 0x0bbf968631911022DA9d335Bff90A96BA5B05eb1
 
 /*==========================================
  =          Library Roles                  =
