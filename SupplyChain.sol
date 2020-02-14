@@ -18,7 +18,7 @@ interface AdminInterface {
 }
 
 /*==========================================
- =          Interface Farmer               =
+ =          Interface Farmer             3  =
  ==========================================*/
 interface FarmerInterface {
     function isFarmer(address _account) external view returns (bool);
@@ -180,6 +180,12 @@ contract SupplyChain {
   // Define a modifier that checks Account is owner
   modifier roleOwnerMain() {
     require(ownableContract.owner() == msg.sender,"Account not is owner");
+    _;
+  }
+  
+  // Define a modifier that checks Account is Admin
+  modifier isAdminMain(address _account) {
+    require(adminContract.isAdmin(_account),"Account not is Farmer");
     _;
   }
   
