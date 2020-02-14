@@ -1,5 +1,5 @@
 pragma solidity ^0.4.24;
-// 0x25f96c86f6d9529178f3Acfd136Ee60C54118685
+// 0x3B9b4873a7A3905226eB49443Ca1530d02702860
 
 /*==========================================
  =             Contract Ownable            =
@@ -24,7 +24,7 @@ contract Ownable {
     }
 
     ///function get status dapp
-    function getStatus() public view onlyOwner returns(bool) {
+    function getStatus() public view returns(bool) {
         return statusApp;
     }
 
@@ -51,10 +51,10 @@ contract Ownable {
     }
 
     /// Define a function to renounce ownerhip
-    function renounceOwnership() public onlyOwner onlyActive {
-        emit LogSetOwner(origOwner, address(0));
-        origOwner = address(0);
-    }
+    // function renounceOwnership() public onlyOwner onlyActive {
+    //     emit LogSetOwner(origOwner, address(0));
+    //     origOwner = address(0);
+    // }
 
     /// Define a public function to transfer ownership
     function transferOwnership(address _newOwner) public onlyOwner onlyActive {

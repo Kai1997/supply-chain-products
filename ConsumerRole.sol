@@ -101,12 +101,20 @@ interface AdminInterface {
 }
 
 /*==========================================
+ =          Interface Ownable              =
+ ==========================================*/
+interface OwnableInterface {
+  function getStatus() external view returns(bool);
+}
+
+/*==========================================
  =          Contract ConsumerRole          =
  ==========================================*/
 contract ConsumerRole {
   using Roles for Roles.Role;
 
   AdminInterface public AdminContract;
+  OwnableInterface public OwnableContract;
   
   /*----------  START EVENT  ----------*/ 
   // Define 2 events, one for Adding, and other for Removing
@@ -119,9 +127,12 @@ contract ConsumerRole {
   
   /*constructor to join address contract of AdminContract
    *@param _contract : is address contract of  AdminContract
+   *["owneable","admin"]
+   *["0x3B9b4873a7A3905226eB49443Ca1530d02702860","0x82B1AD4F680F94caF01774F8bB7EEE6A3f7e1B0F"]
    */
-  constructor(address _contract) public {
-      AdminContract = AdminInterface(_contract);
+  constructor(address[2] _contract) public {
+      OwnableContract = OwnableInterface(_contract[0]);
+      AdminContract = AdminInterface(_contract[1]);
   }
 
   /*----------  START MODIFIER  ----------*/
@@ -130,15 +141,21 @@ contract ConsumerRole {
     require(AdminContract.isAdmin(msg.sender),"Not is admin");
     _;
   }
+  // Define a modifier that checks stataus dapp
+  modifier onlyActive() {
+    require(OwnableContract.getStatus(),"Dapp not active");
+    _;
+  }
   /*----------  END MODIFIER  ----------*/
   
   /*function 'joinNetwork' to join address contract of AdminContract
    *@param _contract : is address contract of  AdminContract
    */
-  function joinNetwork(address _contract)
+  function joinNetwork(address[2] _contract)
     public
   {
-      AdminContract = AdminInterface(_contract);
+     OwnableContract = OwnableInterface(_contract[0]);
+      AdminContract = AdminInterface(_contract[1]);
   }
   
   /*function 'checkIsAdmin' to check msg.sender is Admin or not
@@ -147,6 +164,13 @@ contract ConsumerRole {
   function checkIsAdmin() public view returns(bool) {
       return AdminContract.isAdmin(msg.sender);
   }
+  
+  /*function 'getStatus' to check status dapp
+   *@return bool
+   */
+  function getStatus() public view returns (bool) {
+        return OwnableContract.getStatus();
+    }
   
   /*function 'isConsumer' to check _account is Consumer or not
    *@param _account : is address metamask of Consumer
@@ -193,7 +217,7 @@ contract ConsumerRole {
    *@modifier onlyAdmin : check is msg.sender is admin or not
    *@event LogFarmerAdded : log information Consumer in chain
    */ 
-  function _addConsumer(address _account, string memory _name, string memory _company,string memory _identify, string memory _lati, string memory _longt) internal onlyAdmin {
+  function _addConsumer(address _account, string memory _name, string memory _company,string memory _identify, string memory _lati, string memory _longt) internal onlyAdmin onlyActive {
     consumers.add(_account, _name, _company, _identify, _lati, _longt);
     emit ConsumerAdded(_account, _name, _company, _identify, _lati, _longt, now);
   }
@@ -203,7 +227,7 @@ contract ConsumerRole {
    *@modifier onlyAdmin : check is msg.sender is admin or not
    *@event LogFarmerRemoved : log information Consumer in chain
    */
-  function _removeConsumer(address _account) internal onlyAdmin {
+  function _removeConsumer(address _account) internal onlyAdmin onlyActive {
     consumers.remove(_account);
     emit ConsumerRemoved(_account, now);
   }

@@ -1,10 +1,13 @@
 pragma solidity ^0.4.25;
 
+// dev : 
+
 /*==========================================
  =          Interface Ownable              =
  ==========================================*/
 interface OwnableInterface {
     function owner() external view returns (address);
+    function getStatus() external view returns(bool);
 }
 
 /*==========================================
@@ -57,13 +60,12 @@ interface DistributorInterface {
 }
 
 /*==========================================
-=          Contract SupplyChain           =
-==========================================*/
+ =          Contract SupplyChain           =
+ ==========================================*/
 contract SupplyChain {
   
   mapping (string => Product) products;         // Define a public mapping 'products' that maps the UPC to an Product.
   address[] public allContract;                 // Define a public array 'allContract' contain 8 address contract [ownable, admin, farmer, manufacturer, distributor, 3pl, retailer, consumer].
-  
   OwnableInterface public ownableContract;              //Define interface: ownableContract
   AdminInterface public adminContract;                  //Define interface: adminContract
   FarmerInterface public farmerContract;                //Define interface: farmerContract
@@ -120,6 +122,12 @@ contract SupplyChain {
   /*----------  START EVENT  ----------*/
   
   /*----------  START MODIFIER  ----------*/
+  
+  // Define a modifier that change active and deactive dapp
+  modifier verifyStatus () {
+    require(ownableContract.getStatus(),"Dapp not active");
+    _;
+  }
   
   // Define a modifier that checks account call function
   modifier verifyCaller (address _address) {
@@ -213,11 +221,11 @@ contract SupplyChain {
   
   /*----------  END MODIFIER  ----------*/
   
-  /*constructor 'joinMainNetwork' to join 8 address contract
+  /*constructor to join 8 address contract
    *@param _contract : is array 8 address contract
    *@modifier roleOwnerMain : check is msg.sender is owner of contract
    *[ownable, admin, farmer, manufacturer, distributor, 3pl, retailer, consumer]
-   * dev : ["","","","","","","",""]
+   * dev : ["0x789F7D9451872c3b1414DB11483AAfd0cA389102","0x4eBDF6F46b44cBD8607C6Ef35BC0F689B854a7ef","0xa646C5af0a0425F51cbAEEa84d182adD98FAfb4F","0xD57b5e5C2A69e653b51103E81Ba50b9f9C77650b","0x251EDf59C5Ce2197B3c54B13dF37C30Bca905aE2","0x8aCCa2d7316E1d0C17c2105e91509aba226ddb10","0xEd5F17c295839b1872EC488e699096441a084eaa","0x0bbf968631911022DA9d335Bff90A96BA5B05eb1"]
    */
   constructor(address[8] _contract) public  {
      ownableContract = OwnableInterface(_contract[0]);
@@ -235,7 +243,7 @@ contract SupplyChain {
    *@param _account : is address account need to check
    *@return bool 
    */
-  function isFarmer(address _account) public view returns (bool) {
+  function isFarmer(address _account)  public view verifyStatus returns (bool) {
       return farmerContract.isFarmer(_account);
   }
   
@@ -243,7 +251,7 @@ contract SupplyChain {
    *@param _account : is address account need to check
    *@return bool 
    */
-  function isManufacturer(address _account) public view returns (bool) {
+  function isManufacturer(address _account) public view verifyStatus returns (bool) {
       return manufacturerContract.isManufacturer(_account);
   }
   
@@ -251,7 +259,7 @@ contract SupplyChain {
    *@param _account : is address account need to check
    *@return bool 
    */
-  function isDistributor(address _account) public view returns (bool) {
+  function isDistributor(address _account) public view verifyStatus returns (bool) {
       return distributorContract.isDistributor(_account);
   }
   
@@ -259,7 +267,7 @@ contract SupplyChain {
    *@param _account : is address account need to check
    *@return bool 
    */
-  function isThirdPL(address _account) public view returns (bool) {
+  function isThirdPL(address _account) public view verifyStatus returns (bool) {
       return thirdPLContract.isThirdPL(_account);
   }
   
@@ -267,7 +275,7 @@ contract SupplyChain {
    *@param _account : is address account need to check
    *@return bool 
    */
-  function isRetailer(address _account) public view returns (bool) {
+  function isRetailer(address _account) public view verifyStatus returns (bool) {
       return retailerContract.isRetailer(_account);
   }
   
@@ -275,10 +283,17 @@ contract SupplyChain {
    *@param _account : is address account need to check
    *@return bool 
    */
-  function isConsumer(address _account) public view returns (bool) {
+  function isConsumer(address _account) public view verifyStatus returns (bool) {
       return consumerContract.isConsumer(_account);
   }
-
+  
+  /*function 'getStatus' to check status dapp
+   *@return bool
+   */
+  function getStatus() public view returns (bool) {
+        return ownableContract.getStatus();
+    }
+  
   /*function 'joinMainNetwork' to join 8 address contract
    *@param _contract : is array 8 address contract
    *@modifier roleOwnerMain : check is msg.sender is owner of contract
@@ -288,6 +303,7 @@ contract SupplyChain {
   function joinMainNetwork(address[8] _contract)
     public
     roleOwnerMain
+    verifyStatus
   {
      ownableContract = OwnableInterface(_contract[0]);
      adminContract = AdminInterface(_contract[1]);
@@ -308,6 +324,7 @@ contract SupplyChain {
   function joinOwnerNetwork(address _contract)
     public
     roleOwnerMain
+    verifyStatus
   {
      ownableContract = OwnableInterface(_contract);
      allContract[0] = _contract;
@@ -334,6 +351,7 @@ contract SupplyChain {
   function joinFarmerNetwork(address _contract)
     public
     roleOwnerMain
+    verifyStatus
   {
      farmerContract = FarmerInterface(_contract);
      allContract[2] = _contract;
@@ -347,6 +365,7 @@ contract SupplyChain {
   function joinManufacturerNetwork(address _contract)
     public
     roleOwnerMain
+    verifyStatus
   {
       manufacturerContract = ManufacturerInterface(_contract);
       allContract[3] = _contract;
@@ -360,6 +379,7 @@ contract SupplyChain {
   function joinDistributorNetwork(address _contract)
     public
     roleOwnerMain
+    verifyStatus
   {
       distributorContract = DistributorInterface(_contract);
       allContract[4] = _contract;
@@ -373,6 +393,7 @@ contract SupplyChain {
   function joinThirdPLNetwork(address _contract)
     public
     roleOwnerMain
+    verifyStatus
   {
       thirdPLContract = ThirdPLInterface(_contract);
       allContract[5] = _contract;
@@ -386,6 +407,7 @@ contract SupplyChain {
   function joinRetailerNetwork(address _contract)
     public
     roleOwnerMain
+    verifyStatus
   {
       retailerContract = RetailerInterface(_contract);
       allContract[6] = _contract;
@@ -399,20 +421,21 @@ contract SupplyChain {
   function joinConsumerNetwork(address _contract)
     public
     roleOwnerMain
+    verifyStatus
   {
       consumerContract = ConsumerInterface(_contract);
       allContract[7] = _contract;
   }
   
-  // Define a function 'kill' if required
-  function kill() public roleOwnerMain {
+  /* Define a function 'kill' if required */
+  function kill() public roleOwnerMain verifyStatus {
     selfdestruct(ownableContract.owner());
   }
   
   /*function 'retreiveAllContract' to get all 8 address contract 
    *@return array
    */
-  function retreiveAllContract() public view returns (address[]){
+  function retreiveAllContract() public view verifyStatus returns (address[]){
         return allContract;
   }
 
@@ -423,7 +446,7 @@ contract SupplyChain {
    *@param _productID : is ID of product.
    *@modifier isFarmerMain : Call modifier to check Farmer has account in system or not.
    */
-  function harvestProduct(string _productID,string _upc, address _originFarmerID,  string  _productNotes) public isFarmerMain(msg.sender)
+  function harvestProduct(string _productID,string _upc, address _originFarmerID,  string  _productNotes) public isFarmerMain(msg.sender) verifyStatus
   {
     products[_upc] = Product({
       upc: _upc,
@@ -452,7 +475,8 @@ contract SupplyChain {
   function processProduct(string _upc) public 
     harvested(_upc)
     isManufacturerMain(msg.sender)
-    verifyCaller(products[_upc].manufacturerID) 
+    verifyCaller(products[_upc].manufacturerID)
+    verifyStatus
   {
     Product storage product = products[_upc];
     
@@ -475,6 +499,7 @@ contract SupplyChain {
   processed(_upc)
   isManufacturerMain(msg.sender)
   verifyCaller(products[_upc].manufacturerID) 
+  verifyStatus
   {
     Product storage product = products[_upc];
     
@@ -496,6 +521,7 @@ contract SupplyChain {
   packed(_upc)
   isDistributorMain(msg.sender)
   verifyCaller(products[_upc].distributorID)
+  verifyStatus
   {
     Product storage product = products[_upc];
      
@@ -517,6 +543,7 @@ contract SupplyChain {
   distributor(_upc)
   isRetailerMain(msg.sender)
   verifyCaller(products[_upc].retailerID)
+  verifyStatus
   {
     Product storage product = products[_upc];
     
@@ -537,6 +564,7 @@ contract SupplyChain {
   shipped(_upc)
   isThirdPLMain(msg.sender)
   verifyCaller(products[_upc].thirdPLID)
+  verifyStatus
   {
     Product storage product = products[_upc];
     
@@ -560,6 +588,7 @@ contract SupplyChain {
     isRetailerMain(msg.sender)
     shipped(_upc) 
     verifyCaller(products[_upc].retailerID)
+    verifyStatus
     {
         Product storage product = products[_upc];
         

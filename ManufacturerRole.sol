@@ -1,5 +1,5 @@
 pragma solidity ^0.4.24;
-// manu : 0xD57b5e5C2A69e653b51103E81Ba50b9f9C77650b
+// manu : 
 
 /*==========================================
  =          Library Roles                  =
@@ -101,11 +101,19 @@ interface AdminInterface {
 }
 
 /*==========================================
+ =          Interface Ownable              =
+ ==========================================*/
+interface OwnableInterface {
+  function getStatus() external view returns(bool);
+}
+
+/*==========================================
  =          Contract Manufacturer          =
  ==========================================*/
 contract Manufacturer {
   using Roles for Roles.Role;
   AdminInterface public AdminContract;
+  OwnableInterface public OwnableContract;
   
   /*----------  START EVENT  ----------*/ 
   // Define 2 events, one for Adding, and other for Removing
@@ -118,9 +126,12 @@ contract Manufacturer {
 
   /*constructor to join address contract of AdminContract
    *@param _contract : is address contract of  AdminContract
+   *["owneable","admin"]
+   *["0x3B9b4873a7A3905226eB49443Ca1530d02702860","0x82B1AD4F680F94caF01774F8bB7EEE6A3f7e1B0F"]
    */
-  constructor(address _contract) public {
-      AdminContract = AdminInterface(_contract);
+  constructor(address[2] _contract) public {
+      OwnableContract = OwnableInterface(_contract[0]);
+      AdminContract = AdminInterface(_contract[1]);
   }
 
   /*----------  START MODIFIER  ----------*/
@@ -129,15 +140,21 @@ contract Manufacturer {
     require(AdminContract.isAdmin(msg.sender),"Not is admin");
     _;
   }
+  // Define a modifier that checks stataus dapp
+  modifier onlyActive() {
+    require(OwnableContract.getStatus(),"Dapp not active");
+    _;
+  }
   /*----------  END MODIFIER  ----------*/
   
   /*function 'joinNetwork' to join address contract of AdminContract
    *@param _contract : is address contract of  AdminContract
    */
-  function joinNetwork(address _contract)
+  function joinNetwork(address[2] _contract)
     public
   {
-      AdminContract = AdminInterface(_contract);
+      OwnableContract = OwnableInterface(_contract[0]);
+      AdminContract = AdminInterface(_contract[1]);
   }
   
   /*function 'checkIsAdmin' to check msg.sender is Admin or not
@@ -146,6 +163,13 @@ contract Manufacturer {
   function checkIsAdmin() public view returns(bool) {
       return AdminContract.isAdmin(msg.sender);
   }
+  
+  /*function 'getStatus' to check status dapp
+   *@return bool
+   */
+  function getStatus() public view returns (bool) {
+        return OwnableContract.getStatus();
+    }
   
   /*function 'isManufacturer' to check _account is Manufacturer or not
    *@param _account : is address metamask of Manufacturer
@@ -192,7 +216,7 @@ contract Manufacturer {
    *@modifier onlyAdmin : check is msg.sender is admin or not
    *@event LogFarmerAdded : log information Manufacturer in chain
    */ 
-  function _addManufacturer(address _account, string memory _name, string memory _company,string memory _identify, string memory _lati, string memory _longt) internal onlyAdmin {
+  function _addManufacturer(address _account, string memory _name, string memory _company,string memory _identify, string memory _lati, string memory _longt) internal onlyAdmin onlyActive {
     manufacturers.add(_account, _name, _company, _identify, _lati, _longt);
     emit LogManufacturerAdded(_account, _name, _company, _identify, _lati, _longt, now);
   }
@@ -202,7 +226,7 @@ contract Manufacturer {
    *@modifier onlyAdmin : check is msg.sender is admin or not
    *@event LogFarmerRemoved : log information Manufacturer in chain
    */ 
-  function _removeManufacturer(address _account) internal onlyAdmin{
+  function _removeManufacturer(address _account) internal onlyAdmin onlyActive {
     manufacturers.remove(_account);
     emit LogManufacturerRemoved(_account,now);
   }
