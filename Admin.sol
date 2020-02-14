@@ -1,15 +1,17 @@
 pragma solidity ^0.4.25;
+//admin: 0x82B1AD4F680F94caF01774F8bB7EEE6A3f7e1B0F
 
-//0x4eBDF6F46b44cBD8607C6Ef35BC0F689B854a7ef
-/**
- * @title Admin
- */
-
+/*==========================================
+ =          Interface Ownable              =
+ ==========================================*/
 interface OwnableInterface {
-    function isOwner() external view returns (bool);
-     function owner() external view returns (address);
+  function owner() external view returns (address);
+  function getStatus() external view returns(bool);
 }
 
+/*==========================================
+ =             Contract Admins             =
+ ==========================================*/
 contract Admins {
     mapping (address => bool) admins;
     
@@ -24,6 +26,11 @@ contract Admins {
         _;
     }
     
+    modifier onlyActive() {
+        require(OwnableContract.getStatus(),"Dapp not active");
+        _;
+    }
+    
     modifier validateAccount(address _account) {
         require(_account != address(0),"Account not exist");
         _;
@@ -32,16 +39,21 @@ contract Admins {
     function getOwner() public view returns (address) {
         return OwnableContract.owner();
     }
+    
+    function getStatus() public view returns (bool) {
+        return OwnableContract.getStatus();
+    }
   /**
    * @dev give an account access to this role
    */
     function joinNetwork(address _contract)
         public
+        onlyActive
     {
         OwnableContract = OwnableInterface(_contract);
     
     }
-  function addAdmin(address _account) public roleOwner validateAccount(_account) {
+  function addAdmin(address _account) public roleOwner validateAccount(_account) onlyActive {
     require(!has(_account),"Account registered");
     admins[_account] = true;
   }
@@ -49,7 +61,7 @@ contract Admins {
   /**
    * @dev remove an account's access to this role
    */
-  function removeAdmin(address _account) roleOwner validateAccount(_account) public {
+  function removeAdmin(address _account) roleOwner validateAccount(_account) onlyActive public {
     require(has(_account),"Account not register");
     admins[_account] = false;
   }
