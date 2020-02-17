@@ -1,5 +1,5 @@
 pragma solidity ^0.4.24;
-// manu : 
+// manu : 0x713140d0BDA6eBb4e109a831Cfef107c65F4CD69
 
 /*==========================================
  =          Library Roles                  =

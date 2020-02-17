@@ -1,5 +1,5 @@
 pragma solidity ^0.4.24;
-// retail " "
+// retail " 0xc5AE2F5891e58A5DAC2a990a8d6Bfe6d7B4Add1F"
 
 /*==========================================
  =          Library Roles                  =

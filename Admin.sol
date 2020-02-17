@@ -17,10 +17,10 @@ contract Admins {
     
     OwnableInterface public OwnableContract;
     /*----------  START EVENT  ----------*/ 
-   // Define 2 events, one for Adding, and other for Removing
-   event LogAdminAdded(address indexed _account, uint _timeAdd);
-   event LogAdminRemoved(address indexed _account, uint _remove);
-   /*----------  END EVENT  ----------*/ 
+    // Define 2 events, one for Adding, and other for Removing
+    event LogAdminAdded(address indexed _account, uint _timeAdd);
+    event LogAdminRemoved(address indexed _account, uint _remove);
+    /*----------  END EVENT  ----------*/ 
     constructor(address _contract) public {
       OwnableContract = OwnableInterface(_contract);
     }
@@ -47,21 +47,21 @@ contract Admins {
     function getStatus() public view returns (bool) {
         return OwnableContract.getStatus();
     }
-  /**
-   * @dev give an account access to this role
-   */
+    /**
+    * @dev give an account access to this role
+    */
     function joinNetwork(address _contract)
         public
         onlyActive
     {
         OwnableContract = OwnableInterface(_contract);
     
+    } 
+    function addAdmin(address _account) public roleOwner validateAccount(_account) onlyActive {
+      require(!has(_account),"Account registered");
+      admins[_account] = true;
+      emit LogAdminAdded(msg.sender, now);
     }
-  function addAdmin(address _account) public roleOwner validateAccount(_account) onlyActive {
-    require(!has(_account),"Account registered");
-    admins[_account] = true;
-    emit LogAdminAdded(msg.sender, now);
-  }
   
   function addListAdmin(address[] _account) public roleOwner onlyActive {
     require(_account.length > 0,"Array must be more than 1"); 

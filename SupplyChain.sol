@@ -65,7 +65,7 @@ interface DistributorInterface {
 contract SupplyChain {
   
   mapping (string => Product) products;         // Define a public mapping 'products' that maps the UPC to an Product.
-  address[] public allContract;                 // Define a public array 'allContract' contain 8 address contract [ownable, admin, farmer, manufacturer, distributor, 3pl, retailer, consumer].
+  address[] allContract;                 // Define a public array 'allContract' contain 8 address contract [ownable, admin, farmer, manufacturer, distributor, 3pl, retailer, consumer].
   OwnableInterface public ownableContract;              //Define interface: ownableContract
   AdminInterface public adminContract;                  //Define interface: adminContract
   FarmerInterface public farmerContract;                //Define interface: farmerContract
@@ -231,7 +231,7 @@ contract SupplyChain {
    *@param _contract : is array 8 address contract
    *@modifier roleOwnerMain : check is msg.sender is owner of contract
    *[ownable, admin, farmer, manufacturer, distributor, 3pl, retailer, consumer]
-   * dev : ["0x789F7D9451872c3b1414DB11483AAfd0cA389102","0x4eBDF6F46b44cBD8607C6Ef35BC0F689B854a7ef","0xa646C5af0a0425F51cbAEEa84d182adD98FAfb4F","0xD57b5e5C2A69e653b51103E81Ba50b9f9C77650b","0x251EDf59C5Ce2197B3c54B13dF37C30Bca905aE2","0x8aCCa2d7316E1d0C17c2105e91509aba226ddb10","0xEd5F17c295839b1872EC488e699096441a084eaa","0x0bbf968631911022DA9d335Bff90A96BA5B05eb1"]
+   * dev : ["0x3B9b4873a7A3905226eB49443Ca1530d02702860","0x82B1AD4F680F94caF01774F8bB7EEE6A3f7e1B0F","0xE83c9a3504350A3617cB322B54E7C477bD04CE0b","0x713140d0BDA6eBb4e109a831Cfef107c65F4CD69","0x8d1519587499e26cB9aF14Caa086d219Ee4dEB90","0x3C2De641ede2EDe9c176e93F7ee3ab2a727dA257","0xc5AE2F5891e58A5DAC2a990a8d6Bfe6d7B4Add1F","0x89F72e529490D4cc9C116d88356749c9F6259De3"]
    */
   constructor(address[8] _contract) public  {
      ownableContract = OwnableInterface(_contract[0]);
@@ -603,6 +603,27 @@ contract SupplyChain {
         product.productState = State.Purchased;
         
         emit LogPurchased(product.productID, _upc, product.productNotes, msg.sender, "consumer", State.Purchased);
+    }
+    
+    /*function get Product Info
+   *@param _upc : is upc of product.
+   *@return : productID, productNotes, productPrice, productState
+   */
+    function getProductInfo(string _upc) public view returns(string, string, uint, State) {
+        Product memory product = products[_upc];
+        
+        return (product.productID ,product.productNotes,product.productPrice, product.productState);
+    }
+    
+    
+    /*function get Product Address account
+   *@param _upc : is upc of product.
+   *@return : ownerID,originFarmerID, distributorID,retailerID, manufacturerID, thirdPLID, consumerID
+   */
+    function getProductAddress(string _upc) public view returns(address, address, address, address , address, address, address) {
+        Product memory product = products[_upc];
+        
+        return (product.ownerID,product.originFarmerID,  product.distributorID,product.retailerID,  product.manufacturerID, product.thirdPLID, product.consumerID);
     }
 }
 
