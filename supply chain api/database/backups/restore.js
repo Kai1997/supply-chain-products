@@ -10,10 +10,10 @@ const appConfig = require('../../config/app.config')
 
 const run = async () => {
     try {
-        let dbFolder = `${appConfig.path.ROOT}/database/backups/db-backups/${DATABASE.DATABASE_NAME}`
+        let dbFolder = `${appConfig.path.ROOT}/database/backups/db-backups/${appConfig.database.DATABASE_NAME}`
         if (fs.existsSync(dbFolder)) {
             await shell.exec(
-                `bash ${appConfig.path.ROOT}/database/backups/restore.sh ${appConfig.database.DATABASE_URL} ${dbFolder} ${DATABASE.DATABASE_NAME}`
+                `bash ${appConfig.path.ROOT}/database/backups/restore.sh ${appConfig.database.DATABASE_URL} ${dbFolder} ${appConfig.database.DATABASE_NAME}`
             )
         } else throw new Error('db-backup not exists')
     } catch (er) {

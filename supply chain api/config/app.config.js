@@ -1,4 +1,5 @@
 const path = require('path')
+require('dotenv').config('@.env')
 module.exports = {
     app: {
         PORT: process.env.PORT || 4000,
@@ -44,5 +45,50 @@ module.exports = {
         cookie: { secure: true }
     },
     socket:{},
-    view:{}
+    view:{},
+    infura: {
+        key: process.env.INFURA_KEY
+    },
+    networks: {
+
+    },
+    contract: {
+        supplyChain: {
+            address:'',
+            abi:''
+        },
+        farmers: {
+            address:'',
+            abi:''
+        },
+        manufacturers: {
+            address:'',
+            abi:''
+        },
+        distributors: {
+            address:'',
+            abi:''
+        },
+        thirdpls: {
+            address:'',
+            abi:''
+        },
+        retailers: {
+            address:'',
+            abi:''
+        },
+        customer: {
+            address:'',
+            abi:''
+        },
+        admin: {
+            address:'',
+            abi:''
+        },
+        ownable: {
+            address:'',
+            abi:''
+        },
+        gasPrice: 10000000000
+    }
 }

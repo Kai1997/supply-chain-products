@@ -1,6 +1,6 @@
 const { pareJwtToken } = require('@utils/jwt')
 const { sendError } = require('@utils/responses')
-const usersService = require('@services/users')
+const usersService = require('../services/user.service')
 const appConfig = require('../../config/app.config')
 
 const { REQUEST_STATUSES: { UNAUTHORIZED } } = require('@constants/index')

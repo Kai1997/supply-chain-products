@@ -1,37 +1,42 @@
-const mongoose = require('mongoose')
-const bcrypt = require('bcryptjs')
+const mongoose = require("mongoose"),
+    bcrypt = require('bcryptjs'),
+    ROLES = ['ADMIN', 'FARMER', 'MANU', 'DISTRIBUTOR','THIRDPL', 'RETAILER', 'CUSTOMER'],
+    STATUS = ['blocked', 'actived', 'pending'],
+    Schema = mongoose.Schema;
 
-const Schema = mongoose.Schema
-const ROLES = ['ADMIN', 'FARMER', 'MANU', 'DISTRIBUTOR','THIRDPL', 'RETAILER', 'CUSTOMER']
-const STATUS = ['blocked', 'actived', 'pending']
-
-const UserSchema = new Schema({
-    username: { type: String ,required: true },
-    email: { type: String, unique: true },
-    password: { type: String, required: true  },
-    metamask: { type: String, unique: true, },
-    latitude: { type: String },
-    longitude: { type: String },
-    avatar: { type: String },
+const userSchema = new Schema({
+    username: String,
+    password: String,
+    email: String,
+    tel: String,
+    address: String,
+    background: String,
+    isActive: { type: Boolean, default: false },
+    coin: { type: String, default: 0 },
+    role: { type: String, default: 0 },
+    tokens: [{
+        access: {
+            type: String,
+            required: true
+        },
+        token: {
+            type: String,
+            required: true
+        }
+    }],
+    deviceTokens: [{ type: String, default: [] }],
     role: { type: String, enum: ROLES, default: 'USER' },
-    status: { type: String, enum: STATUS, default: 'pending' }
+    status: { type: String, enum: STATUS, default: 'pending' },
+    createdAt: { type: Date, default: new Date() },
+    updatedAt: { type: Date, default: new Date() },
 }, {
-    timestamps: true
-})
+        usePushEach: true
+    }, {
+        collection: "users"
+});
 
-/**
- * virtual
- */
-
-// UserSchema.virtual('created_at').get(function () {
-//     return moment(this.createdAt).format('DD-MM-YYYY hh:mm:ss')
-// })
-
-/**
- * Method
- */
-UserSchema.methods.checkPassword = function (password) {
+userSchema.methods.checkPassword = function (password) {
     return bcrypt.compareSync(password || '', this.password)
 }
+module.exports =  mongoose.model("User", userSchema);
 
-module.exports = mongoose.model('User', UserSchema)

@@ -12,9 +12,9 @@ const cronJobs = require('@cronjobs/index')
 const initModels = require('./config/model.config')
 const initRoutes = require('./config/route.config')
 const initCronJobs = require('./config/cronjobs.config')
+const initWeb3 = require('./config/web3.config')
 
 const socket = require('@socket/index')
-
 const connectDatabase = (url = appConfig.database.DATABASE_URL) => new Promise((resolve, reject) => {
     mongoose.set('useCreateIndex', true)
     mongoose.connect(url, { useNewUrlParser: true ,useUnifiedTopology: true })
@@ -41,6 +41,7 @@ composePromise(
     _ => initCronJobs(cronJobs),
     _ => initRoutes(app),
     _ => initModels(appConfig),
+    _ => initWeb3(),
     _ => connectDatabase()
 )()
     .catch(err => {

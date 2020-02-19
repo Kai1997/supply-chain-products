@@ -5,9 +5,10 @@ const session = require('express-session')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const appConfig = require('../config/app.config')
-
+var morgan = require('morgan')
 const compileSass = require('express-compile-sass')
 const root = process.cwd()
+const winston = require('../config/winston.config')
 
 // midleware
 const {
@@ -25,6 +26,8 @@ const {
 
 module.exports = (app, io) => {
     app.use(cors(appConfig.cors))
+
+    app.use(morgan('combined', { stream: winston.stream }));
 
     // View engine
     app.set('view engine', 'ejs')

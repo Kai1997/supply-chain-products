@@ -1,5 +1,3 @@
-// namespaces
-// eslint-disable-next-line no-empty-pattern
 const {
     // testChat,
 } = require('./namespaces')
