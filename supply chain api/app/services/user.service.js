@@ -3,14 +3,12 @@ const mongoose = require('mongoose'),
     User = mongoose.model('User'),
     constants = require('../../common/constants'),
     MessageConstants = constants.MessageConstants,
+    Joi = require('joi'),
     fs = require('fs');
 
 class UserService {
     register(host, p) {
         return new Promise((resolve, reject) => {
-            fs.readFile('temp/default_sp.json', 'utf8', function (err, data) {
-                if (err) throw err;
-                let sp = JSON.parse(data);
                 var username = p.username.toLowerCase();
                 const validate = Joi.validate(p, {
                     username: Joi.string().required().min(6),
@@ -18,11 +16,12 @@ class UserService {
                     email: Joi.string().email({ minDomainAtoms: 2 }),
                     address: Joi.string(),
                     tel: Joi.string(),
-                    background: Joi.string(),
+                    // background: Joi.string(),
                     isActive: Joi.boolean()
                 });
                 if(validate.error){
                     return  resolve({
+                                result: false,
                                 message: validate.error.details[0].message
                             });
                 }
@@ -44,7 +43,6 @@ class UserService {
                                 address: p.address,
                                 coin: 0,
                                 background: '',
-                                criterion: sp.criterion,
                                 isActive: false,
                                 lang: p.lang,
                                 createdAt: new Date()
@@ -60,7 +58,6 @@ class UserService {
                         }
                     })
                     .catch(err => reject(err));
-            });
         });
     }
 
@@ -68,6 +65,22 @@ class UserService {
         return new Promise((resolve, reject) => {
             User.findOne({
                 username: username
+            })
+                .then(user => {
+                    if (user) {
+                        resolve({ success: false, message: MessageConstants.UsernameExistingError })
+                    } else {
+                        resolve({ success: true })
+                    }
+                })
+                .catch(err => reject(err));
+        });
+    }
+
+    checkMetamask(metamask) {
+        return new Promise((resolve, reject) => {
+            User.findOne({
+                metamask: metamask
             })
                 .then(user => {
                     if (user) {

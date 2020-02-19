@@ -41,7 +41,7 @@ composePromise(
     _ => initCronJobs(cronJobs),
     _ => initRoutes(app),
     _ => initModels(appConfig),
-    _ => initWeb3(),
+    // _ => initWeb3(),
     _ => connectDatabase()
 )()
     .catch(err => {

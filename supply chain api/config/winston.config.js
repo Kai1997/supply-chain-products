@@ -1,5 +1,6 @@
 var appRoot = require('app-root-path');
 var winston = require('winston');
+require('dotenv').config('@.env')
 
 // define the custom settings for each transport (file, console)
 var options = {
@@ -15,7 +16,7 @@ var options = {
   console: {
     level: 'debug',
     handleExceptions: true,
-    json: false,
+    json: true,
     colorize: true,
   },
 };
@@ -37,4 +38,9 @@ logger.stream = {
   },
 };
 
+if (process.env.NODE_ENV !== 'production') {
+  logger.add(new winston.transports.Console({
+    format: winston.format.simple()
+  }));
+}
 module.exports = logger;

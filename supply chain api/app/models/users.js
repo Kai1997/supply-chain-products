@@ -1,7 +1,6 @@
 const mongoose = require("mongoose"),
     bcrypt = require('bcryptjs'),
     ROLES = ['ADMIN', 'FARMER', 'MANU', 'DISTRIBUTOR','THIRDPL', 'RETAILER', 'CUSTOMER'],
-    STATUS = ['blocked', 'actived', 'pending'],
     Schema = mongoose.Schema;
 
 const userSchema = new Schema({
@@ -9,11 +8,16 @@ const userSchema = new Schema({
     password: String,
     email: String,
     tel: String,
-    address: String,
-    background: String,
+    address: {
+        lati: { type: String, default: null},
+        longi: {type: String, default: null}
+    },
+    metamask: {type: String, default: null},
+    identify: {type: String, default: null},
+    background: {type: String, default: null},
     isActive: { type: Boolean, default: false },
     coin: { type: String, default: 0 },
-    role: { type: String, default: 0 },
+    role: { type: String, default: 6 },
     tokens: [{
         access: {
             type: String,
@@ -25,8 +29,6 @@ const userSchema = new Schema({
         }
     }],
     deviceTokens: [{ type: String, default: [] }],
-    role: { type: String, enum: ROLES, default: 'USER' },
-    status: { type: String, enum: STATUS, default: 'pending' },
     createdAt: { type: Date, default: new Date() },
     updatedAt: { type: Date, default: new Date() },
 }, {

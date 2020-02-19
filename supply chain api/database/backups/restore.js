@@ -7,6 +7,7 @@ const fs = require('fs')
 const shell = require('shelljs')
 const appConfig = require('../../config/app.config')
 
+console.log(appConfig.path.ROOT);
 
 const run = async () => {
     try {
