@@ -14,7 +14,7 @@ class UserService {
                     username: Joi.string().required().min(6),
                     password: Joi.string().required().min(6),
                     email: Joi.string().email({ minDomainAtoms: 2 }),
-                    address: Joi.string(),
+                    // address: Joi.string(),
                     tel: Joi.string(),
                     // background: Joi.string(),
                     isActive: Joi.boolean()
@@ -93,10 +93,10 @@ class UserService {
         });
     }
 
-    verify(username, code) {
+    verify(email, code) {
         return new Promise((resolve, reject) => {
                 User.findOne({
-                username: username,
+                    email: email,
             })
                 .then(user => {
                     if (user == null) {

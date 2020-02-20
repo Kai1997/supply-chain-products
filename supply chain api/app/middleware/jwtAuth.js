@@ -3,7 +3,7 @@ const { sendError } = require('@utils/responses')
 const usersService = require('../services/user.service')
 const appConfig = require('../../config/app.config')
 
-const { REQUEST_STATUSES: { UNAUTHORIZED } } = require('@constants/index')
+const { REQUEST_STATUSES: { UNAUTHORIZED } } = require('../../common/constants')
 
 module.exports = (pareJwtTokenOptions) => (req, res, next) => {
     Promise.resolve()

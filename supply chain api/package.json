@@ -51,7 +51,6 @@
         "@services": "./app/services",
         "@socket": "./app/socket",
         "@config": "./config",
-        "@constants": "./constants",
         "@database": "./database",
         "@routes": "./routes",
         "@third-parties": "./third-parties",

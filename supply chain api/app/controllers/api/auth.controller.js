@@ -7,44 +7,6 @@ const authService = require('../../services/auth.service'),
 
 
 class AuthController {
-
-    authorizeBook(req, res, next) {
-        let err = {
-            message: MessageConstants.AccessDenied,
-            status: 403
-        };
-        if (!req.query.token) {
-            next(err);
-        } else {
-            authService.verifyUserAndCustomerFromToken(req.query.token).then(result => {
-                if (!result) {
-                    return next(err);
-                }
-                req.body.user = result.user;
-                return next();
-            }).catch(err => next(err));
-        }
-    }
-
-    authorizeShip(req, res, next) {
-        let err = {
-            message: MessageConstants.AccessDenied,
-            status: 403
-        };
-        if (!req.query.token) {
-            next(err);
-        } else {
-            authService.verifyShipToken(req.query.token).then(result => {
-                if (!result) {
-                    return next(err);
-                }
-
-                req.body.user = result.user;
-                return next();
-            }).catch(err => next(err));
-        }
-    }
-
     login(req, res, next) {
         authService.login(req.body.username, req.body.password).then(user => {
             res.json(user);
@@ -71,7 +33,7 @@ class AuthController {
     }
 
     verify(req, res, next) {
-        userService.verify(req.query.username, req.query.code).then(rs => {
+        userService.verify(req.query.email, req.query.code).then(rs => {
             res.json(rs);
         }).catch(err => next(err));
     }
@@ -272,26 +234,6 @@ class AuthController {
                     }).catch(err => next(err));
                 }
             }
-        }
-    }
-
-    authorizeMenu(req, res, next) {
-        let err = {
-            message: MessageConstants.AccessDenied,
-            status: 403
-        };
-        if (!req.query.token) {
-            next(err);
-        } else {
-            authService.verifyUserAndCustomerFromToken(req.query.token).then(result => {
-                if (!result) {
-                    return next(err);
-                }
-
-                req.body.user = result.user;
-                req.body.customer = result.customer;
-                return next();
-            }).catch(err => next(err));
         }
     }
 }

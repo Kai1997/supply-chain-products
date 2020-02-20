@@ -1,3 +1,3 @@
 module.exports = (app) => Promise.resolve(
-    require('@routes/express')(app)
+    require('./express.config')(app)
 )

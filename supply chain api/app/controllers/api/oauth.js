@@ -1,5 +1,5 @@
 const User = require('@models/users')
-const { REQUEST_STATUSES: { FORBIDDEND, LOW_AUTHORIZED } } = require('@constants/index')
+const { REQUEST_STATUSES: { FORBIDDEND, LOW_AUTHORIZED } } = require('../../../common/constants')
 
 // services
 const { tokens: tokensService } = require('@services/index')

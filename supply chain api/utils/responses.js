@@ -1,4 +1,4 @@
-const { REQUEST_STATUSES } = require('@constants/index')
+const { REQUEST_STATUSES } = require('../common/constants')
 const appConfig = require('../config/app.config')
 
 

@@ -6,12 +6,46 @@ const mongoose = require('mongoose'),
 
 class SupplychainService {
      getInfoProduct(upc) {
-         return new Promise((resolve, reject) => contract.methods.getProductInfo(upc).call({
-            })
+         let data =[]
+         return new Promise((resolve, reject) => contract.methods.getProductInfo(upc).call({})
             .then(productInfo => {
-                resolve(productInfo)
+                if (productInfo["0"] !== "") {
+                    contract.methods.getProductAddress(upc).call({})
+                    .then(productAddress => {
+                        let info = {
+                            upc: upc,
+                            productId: productInfo["0"],
+                            productNotes: productInfo["1"],
+                            productPrice: productInfo["2"],
+                            productState: productInfo["3"],
+                            ownerID: productAddress["0"],
+                            originFarmerID: productAddress["1"],
+                            distributorID: productAddress["2"],
+                            manufacturerID: productAddress["4"],
+                            thirdPLID: productAddress["5"],
+                            retailerID: productAddress["3"],
+                        }
+                        resolve({
+                            status: true,    
+                            data: [...data, info]
+                        })
+                    })
+                    .catch(err => resolve({
+                        status: false,
+                        data: MessageConstants.ProductNotFound
+                    }))
+                } else {
+                    resolve({
+                        status: false,
+                        data: MessageConstants.ProductNotFound
+                    })
+                }
+                
             } )
-            .catch(err => reject(err)));
+            .catch(err => resolve({
+                        status: false,
+                        data: MessageConstants.ProductNotFound
+                    })));
     }
 
 }
