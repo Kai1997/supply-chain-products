@@ -4,7 +4,7 @@
     "main": "server.js",
     "license": "MIT",
     "scripts": {
-        "start": "NODE_ENV=development nodemon server.js",
+        "start": "NODE_ENV=development nodemon ./bin/www",
         "prod:local": "NODE_ENV=production node server.js",
         "db:migrate": "yarn db:backup && node ./database/migrations/index.js",
         "db:backup": "node ./database/backups/backup.js",
