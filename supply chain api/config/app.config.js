@@ -54,7 +54,7 @@ module.exports = {
     },
     contract: {
         supplyChain: {
-            address:'',
+            address:'0x58F2231c5F758Af264a6F57dA3336008DA101c60',
             abi:''
         },
         farmers: {
@@ -89,6 +89,7 @@ module.exports = {
             address:'',
             abi:''
         },
-        gasPrice: 10000000000
+        gasPrice: 10000000000,
+        account: process.env.DEFAULT_ACCOUNT
     }
 }
