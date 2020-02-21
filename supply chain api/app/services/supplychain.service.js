@@ -20,7 +20,7 @@ class SupplychainService {
 
          return new Promise((resolve, reject) => contractMain.methods.getProductInfo(upc).call({})
             .then(productInfo => {
-                if (productInfo["0"] !== "") {
+                if (productInfo && productInfo["0"] !== "") {
                     contractMain.methods.getProductAddress(upc).call({})
                     .then(async productAddress => {
                         

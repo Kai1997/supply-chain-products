@@ -32,3 +32,8 @@
 {"message":"::1 - - [21/Feb/2020:02:44:51 +0000] \"GET /api/v1/supply/getInfoProduct?upc=upc12345 HTTP/1.1\" 200 507 \"-\" \"PostmanRuntime/7.22.0\"\n","level":"info"}
 {"message":"::1 - - [21/Feb/2020:02:47:22 +0000] \"GET /api/v1/supply/getInfoProduct?upc=upc12345 HTTP/1.1\" 200 507 \"-\" \"PostmanRuntime/7.22.0\"\n","level":"info"}
 {"message":"::1 - - [21/Feb/2020:02:48:09 +0000] \"GET /api/v1/supply/getInfoProduct?upc=upc12345 HTTP/1.1\" 200 474 \"-\" \"PostmanRuntime/7.22.0\"\n","level":"info"}
+{"message":"::1 - - [21/Feb/2020:02:50:28 +0000] \"GET /api/v1/supply/getInfoProduct?upc=upc12345d HTTP/1.1\" 200 43 \"-\" \"PostmanRuntime/7.22.0\"\n","level":"info"}
+{"message":"::1 - - [21/Feb/2020:02:50:46 +0000] \"GET /api/v1/supply/getInfoProduct?upc=upc12345 HTTP/1.1\" 200 474 \"-\" \"PostmanRuntime/7.22.0\"\n","level":"info"}
+{"message":"::1 - - [21/Feb/2020:02:51:02 +0000] \"GET /api/v1/customer/all HTTP/1.1\" 200 502 \"-\" \"PostmanRuntime/7.22.0\"\n","level":"info"}
+{"message":"::1 - - [21/Feb/2020:02:56:17 +0000] \"GET /api/v1/customer/all HTTP/1.1\" 200 502 \"-\" \"PostmanRuntime/7.22.0\"\n","level":"info"}
+{"message":"::1 - - [21/Feb/2020:02:56:24 +0000] \"GET /api/v1/supply/getInfoProduct?upc=upc12345 HTTP/1.1\" 200 474 \"-\" \"PostmanRuntime/7.22.0\"\n","level":"info"}
