@@ -1,17 +1,44 @@
 const mongoose = require('mongoose'),
     constants = require('../../common/constants'),
     MessageConstants = constants.MessageConstants,
-    {contract} = require('../../config/contract.config.js'),
+    {contractMain} = require('../../config/contract.config.js'),
+    FarmerService = require('./farmer.service'),
+    ManuService = require('./manufacturer.service'),
+    DistriService = require('./distributor.service'),
+    ThirdplService = require('./thirdpl.service'),
+    RetailerService = require('./retailer.service'),
     appConfig = require('../../config/app.config')
 
 class SupplychainService {
      getInfoProduct(upc) {
          let data =[]
-         return new Promise((resolve, reject) => contract.methods.getProductInfo(upc).call({})
+         let originFarmerID =[]
+         let manufacturerID =[]
+         let distributorID =[]
+         let thirdPLID =[]
+         let retailerID =[]
+
+         return new Promise((resolve, reject) => contractMain.methods.getProductInfo(upc).call({})
             .then(productInfo => {
                 if (productInfo["0"] !== "") {
-                    contract.methods.getProductAddress(upc).call({})
-                    .then(productAddress => {
+                    contractMain.methods.getProductAddress(upc).call({})
+                    .then(async productAddress => {
+                        
+                        await FarmerService.getFarmerByMetamask(productAddress["1"]).then(data =>{
+                            originFarmerID = data;
+                        });
+                        await ManuService.getManuByMetamask(productAddress["4"]).then(data =>{
+                            manufacturerID = data;
+                        });
+                        await DistriService.getDistriByMetamask(productAddress["2"]).then(data =>{
+                            distributorID = data;
+                        });
+                        await ThirdplService.getThirdplByMetamask(productAddress["5"]).then(data =>{
+                            thirdPLID = data;
+                        });
+                        await RetailerService.getRetailerByMetamask(productAddress["3"]).then(data =>{
+                            retailerID = data;
+                        });
                         let info = {
                             upc: upc,
                             productId: productInfo["0"],
@@ -19,11 +46,11 @@ class SupplychainService {
                             productPrice: productInfo["2"],
                             productState: productInfo["3"],
                             ownerID: productAddress["0"],
-                            originFarmerID: productAddress["1"],
-                            distributorID: productAddress["2"],
-                            manufacturerID: productAddress["4"],
-                            thirdPLID: productAddress["5"],
-                            retailerID: productAddress["3"],
+                            originFarmerID: originFarmerID,
+                            distributorID: distributorID,
+                            manufacturerID: manufacturerID,
+                            thirdPLID: thirdPLID,
+                            retailerID: retailerID,
                         }
                         resolve({
                             status: true,    
