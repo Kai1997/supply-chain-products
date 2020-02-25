@@ -1,101 +1,74 @@
-import React, { Component, Fragment } from 'react'
-import { Redirect } from 'react-router-dom'
-import '../../styles/login.css'
-import PropTypes from 'prop-types';
-import { GetToken } from '../../common/utilities/utilities';
+import React, { Component } from "react";
+import { List, ListItem, SearchBar } from "react-native-elements";
+import {
+	StyleSheet,
+	Text,
+	View,
+	Button,
+	FlatList,
+	TouchableHighlight,
+	Image
+} from "react-native";
 
-export default class Account extends Component {
+import { connect } from 'react-redux';
+import { getInfoProductAction } from '../../actions/homeActions/actionCreators';
+import { withNavigation, NavigationActions } from "react-navigation";
 
-    constructor(props) {
-        super(props);
-        this.state = { 
-            username: "",
-            password : "",
-            usernameRegister: "",
-            email: "" ,
-            passwordRegister: "",
-            message: ""
-        };
+class Account extends React.Component {
+	static navigationOptions = ({ navigation }) => {
+		const { state, setParams } = navigation;
+		return {
+			drawerLabel: "Account",
+			title: "Account",
+			headerStyle: styles.headerStyle,
+			headerTitleStyle: styles.headerTitleStyle,
+			headerTintColor: "white"
+			// headerRight: <MenuIcon />
+		};
+	};
 
-    }
-    componentDidMount() {
-    }
-    login = () => {
-        let { username, password } = this.state;
-        this.props.login(username, password);
-    }
-    register = () => {
-        let { usernameRegister, email, passwordRegister } = this.state;
-        this.props.register(usernameRegister, email, passwordRegister);
-        this.setState({
-            message: this.props.message
-        }, ()=> console.log(this.state)); 
-    }
-    onHandleChangeInput =(e) => {
-        this.setState({
-          [e.target.name]: e.target.value
-        });
-    }
-    render() {
-        const { isAuth, message } = this.props;
-        const { from } = this.props.location.state || { from: { pathname: '/' } }
-        if (isAuth) {
-            return <Redirect to={from} />
-        }
+	constructor(props, context) {
+		super(props, context);
+		this.state = {
+		};
+	}
 
-        return (
-            <Fragment className="login-register" >
-                <div className="bg" key ="1"></div>
-                <div className="panel" key ="2">
-                    <input type="radio" id="switch-open" name="switch" />
-                    <input type="radio" id="switch-close" name="switch" />
-                    <div className="login">
-                        <h1>LOGIN</h1>
-                        <div className="group">
-                            <i className="fa fa-envelope" aria-hidden="true" />
-                            <input type="text" id="username" name= "username" placeholder="E-Mail" onChange ={this.onHandleChangeInput}/>
-                            <label htmlFor="username" />
-                        </div>
-                        <div className="group">
-                            <i className="fa fa-unlock-alt" aria-hidden="true" />
-                            <input type="password" id="password" name ="password" placeholder="Password" onChange ={this.onHandleChangeInput}/>
-                            <label htmlFor="password" />
-                        </div>
-                        <input type="submit" defaultValue="LOGIN" onClick = {this.login}/>
-                    </div>
-                    <div className="register">
-                        <label className="button-open" htmlFor="switch-open" />
-                        <label className="button-close" htmlFor="switch-close" />
-                        <div className="inner">
-                            <h1>REGISTER</h1>
-                            <p>{message}</p>
-                            <div className="group">
-                                <i className="fa fa-user" aria-hidden="true" />
-                                <input type="text" id="name" name ="usernameRegister" placeholder="Name" onChange ={this.onHandleChangeInput}/>
-                                <label htmlFor="name" />
-                            </div>
-                            <div className="group">
-                                <i className="fa fa-envelope" aria-hidden="true" />
-                                <input type="text" id="email" name ="email" placeholder="E-Mail" onChange ={this.onHandleChangeInput}/>
-                                <label htmlFor="email" />
-                            </div>
-                            <div className="group">
-                                <i className="fa fa-unlock-alt" aria-hidden="true" />
-                                <input type="password" id="password" name ="passwordRegister" placeholder="Password" onChange ={this.onHandleChangeInput}/>
-                                <label htmlFor="password" />
-                            </div>
-                            <input type="submit" defaultValue="REGISTER" onClick = {this.register}/>
-                        </div>
-                    </div>
-                </div>
-            </Fragment>
-        )
-    }
+	componentDidMount() {
+	}
+	render() {
+		return (
+			 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+
+         		 <Text>Profile Activity Screen</Text>
+
+        	</View>
+
+		)
+	}
 }
 
-Account.propTypes = {
-    login: PropTypes.func,
-    register: PropTypes.func,
-    isAuth: PropTypes.bool, 
-    message: PropTypes.string,
+var styles = StyleSheet.create({
+	headerStyle: {
+		backgroundColor: "#df3237",
+		elevation: 0,
+		shadowOpacity: 0
+	},
+	headerTitleStyle: {
+		color: "#eee",
+		alignSelf: 'center',
+		textAlign: 'center',
+	}
+});
+
+const mapStateToProps = (state) => {
+	return {
+		
+	}
 }
+
+const mapDispatchToProps = (dispatch) => {
+	return {
+	}
+}
+
+export default withNavigation(connect(mapStateToProps, mapDispatchToProps)(Account));

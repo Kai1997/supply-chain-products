@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { List, ListItem, SearchBar } from "react-native-elements";
+import { List, ListItem,  SearchBar } from "react-native-elements";
 import {
 	StyleSheet,
 	Text,
@@ -7,6 +7,7 @@ import {
 	Button,
 	FlatList,
 	TouchableHighlight,
+	TouchableOpacity,
 	Image
 } from "react-native";
 
@@ -14,6 +15,7 @@ import Toast from "react-native-root-toast";
 import { connect } from 'react-redux';
 import { getInfoProductAction } from '../../actions/homeActions/actionCreators';
 import { withNavigation, NavigationActions } from "react-navigation";
+// import { MenuIcon } from "../../common/component/navigation/MenuIcon";
 
 class Home extends React.Component {
 	static navigationOptions = ({ navigation }) => {
@@ -24,7 +26,7 @@ class Home extends React.Component {
 			headerStyle: styles.headerStyle,
 			headerTitleStyle: styles.headerTitleStyle,
 			headerTintColor: "white"
-			// headerRight: <MenuIcon />
+			// headerLeft: <MenuIcon />
 		};
 	};
 
@@ -61,8 +63,8 @@ class Home extends React.Component {
 
 		}
 		return (
-			<View style={styles.homeContainer}>
-				<View ><Text >Product Info</Text></View>
+			<View style={styles.MainContainer}>
+				{/* <View ><Text >Product Info</Text></View>
 				<View >
 					{renderInfo}
 				</View>
@@ -70,7 +72,20 @@ class Home extends React.Component {
 					onPress={this._getProductInfo}
 					title="Red button!"
 					color="red"
-				/>
+				/> */}
+				<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+				<TouchableOpacity
+					style={styles.button}
+					onPress={() => this.props.navigation.navigate('Settings')}>
+					<Text style={styles.text}>Go to settngs Tab</Text>
+				</TouchableOpacity>
+				<TouchableOpacity
+					style={styles.button}
+					onPress={() => this.props.navigation.navigate('Profile')}>
+
+					<Text style={styles.text}>Goto Profile Screen</Text>
+				</TouchableOpacity>
+				</View>
 			</View>
 
 		)
@@ -78,9 +93,7 @@ class Home extends React.Component {
 }
 
 var styles = StyleSheet.create({
-	homeContainer: {
-		marginBottom: 20
-	},
+	
 	headerStyle: {
 		backgroundColor: "#df3237",
 		elevation: 0,
@@ -90,6 +103,27 @@ var styles = StyleSheet.create({
 		color: "#eee",
 		alignSelf: 'center',
 		textAlign: 'center',
+	},
+	MainContainer: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+		backgroundColor: '#f5fcff',
+		padding: 11
+
+	},
+
+	button: {
+		alignItems: 'center',
+		backgroundColor: '#43A047',
+		padding: 12,
+		width: 280,
+		marginTop: 12,
+	},
+
+	text: {
+
+		color: '#fff'
 	}
 });
 

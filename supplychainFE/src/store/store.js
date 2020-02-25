@@ -15,7 +15,7 @@ const initState = {
                 result: false,
                 message: ''
             },
-            infoLogin: []
+            infoAccount: []
         },
         home: {
             posts: [],
@@ -26,7 +26,6 @@ const initState = {
             loading: false
         }
     }
-// const initState ={};
 const store = createStore(
     rootReducer,
     initState,

@@ -1,7 +1,6 @@
 import { combineReducers } from 'redux';
 import homeReducers from './homeReducers/homeReducers';
 import accountReducers from './accountReducers/accountReducers';
-import postReducers from './postReducers/postReducers';
 
 const uiReducer = (state = {}, action) => {
     switch (action.type) {
@@ -17,6 +16,5 @@ const uiReducer = (state = {}, action) => {
 export const rootReducer = combineReducers({
     ui: uiReducer,
     home: homeReducers,
-    account: accountReducers,
-    post: postReducers
+    account: accountReducers
 })
