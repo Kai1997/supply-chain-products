@@ -12,7 +12,7 @@ const contractDistri = new web3.eth.Contract(ABI.DistributerABI, appConfig.contr
 const contractThirdpl = new web3.eth.Contract(ABI.ThirdPLABI, appConfig.contract.address.thirdpl,{ gasPrice: appConfig.contract.gasPrice});
 const contractRetailer = new web3.eth.Contract(ABI.RetailerABI, appConfig.contract.address.retailer,{ gasPrice: appConfig.contract.gasPrice});
 const contractCustomer = new web3.eth.Contract(ABI.ConsumerABI, appConfig.contract.address.customer,{ gasPrice: appConfig.contract.gasPrice});
-console.log(contractRetailer)
+
 module.exports = {
     contractMain,
     contractOwn,
