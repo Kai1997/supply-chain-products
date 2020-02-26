@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import {
   StyleSheet,
   Text,
@@ -10,30 +10,15 @@ import {
 
 import { List, ListItem, Icon } from "react-native-elements";
 import { connect } from "react-redux";
-import CONFIG from "../../constants";
 import { withNavigation, NavigationActions } from "react-navigation";
 
-import { createIconSetFromIcoMoon } from "react-native-vector-icons";
-import fontmoonConfig from "../../DanangTradeFontSelection.json";
-
-const CustomIcon = createIconSetFromIcoMoon(
-  fontmoonConfig,
-  "danh-muc-san-pham",
-  "DanangTrade.ttf"
-);
-
-class MenuComponent extends React.Component {
+class MenuComponent extends Component {
   constructor(props, context) {
     super(props, context);
-
-    let imgSources = require("../../dump/logos");
-
     this.state = {};
-
-    this.logout = this.logout.bind(this);
   }
 
-  logout() {
+  logout = () => {
     const resetAction = NavigationActions.reset({
       index: 0,
       actions: [NavigationActions.navigate({ routeName: "Home" })]
@@ -85,7 +70,7 @@ class MenuComponent extends React.Component {
   ];
 
   render() {
-    let logo = require("../../assets/images/app-logo.png");
+    let logo = require("../../../assert/imgs/logo.png");
 
     return (
       <View style={styles.sideMenu}>
@@ -188,11 +173,7 @@ class MenuComponent extends React.Component {
                   roundAvatar
                   leftIcon={
                     <View style={styles.listItemIcon}>
-                      <CustomIcon
-                        name={category.largeIcon.substring(14)}
-                        size={20}
-                        color="#bf1313"
-                      />
+                    
                     </View>
                   }
                   onPress={() => this._pressRow(category)}
@@ -252,14 +233,20 @@ let styles = StyleSheet.create({
 });
 
 MenuComponent.defaultProps = {
-  categories: []
+  categories: [],
+  auth: {
+    isAuthenticated: false
+  }
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     auth: state.auth,
     categories: state.categories
   };
 };
-
-export default connect(mapStateToProps)(MenuComponent);
+const mapDispatchToProps = (dispatch) => {
+	return {
+	}
+}
+export default withNavigation(connect(mapStateToProps, mapDispatchToProps)(MenuComponent));

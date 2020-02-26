@@ -1,5 +1,5 @@
-import React from "react";
-import { TouchableOpacity } from "react-native";
+import React, {memo} from "react";
+import { TouchableOpacity, StyleSheet } from "react-native";
 import { Icon } from "react-native-elements";
 import { withNavigation } from "react-navigation";
 
@@ -8,6 +8,7 @@ class MenuIcon extends React.Component {
     return (
       <TouchableOpacity
         activeOpacity={1}
+        style ={{marginLeft: 10}}
         onPress={() => {
           this.props.navigation.navigate("Menu");
         }}
@@ -23,5 +24,4 @@ class MenuIcon extends React.Component {
     );
   }
 }
-
-export default withNavigation(MenuIcon);
+export default withNavigation(memo(MenuIcon));

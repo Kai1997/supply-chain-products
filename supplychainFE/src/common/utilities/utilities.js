@@ -27,6 +27,13 @@ export const randomColor = () => {
     return `rgb(${values})`;
 }
 
+export const randomIntro = () => {
+    var randomBoolean = Math.random() < 0.5;
+    console.log("s",randomBoolean);
+    return randomBoolean;
+}
+
+
 export const emailValidator = email => {
   const re = /\S+@\S+\.\S+/;
 

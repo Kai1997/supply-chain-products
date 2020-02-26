@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { List, ListItem,  SearchBar } from "react-native-elements";
 import {
 	StyleSheet,
@@ -10,12 +11,10 @@ import {
 	TouchableOpacity,
 	Image
 } from "react-native";
-
-import Toast from "react-native-root-toast";
 import { connect } from 'react-redux';
 import { getInfoProductAction } from '../../actions/homeActions/actionCreators';
 import { withNavigation, NavigationActions } from "react-navigation";
-// import { MenuIcon } from "../../common/component/navigation/MenuIcon";
+import  MenuIcon  from "../../components/MenuIcon";
 
 class Home extends React.Component {
 	static navigationOptions = ({ navigation }) => {
@@ -25,8 +24,16 @@ class Home extends React.Component {
 			title: "Home",
 			headerStyle: styles.headerStyle,
 			headerTitleStyle: styles.headerTitleStyle,
-			headerTintColor: "white"
-			// headerLeft: <MenuIcon />
+			headerTintColor: "white",
+			headerLeft: ()=> <MenuIcon />,
+			headerRight: (
+				<TouchableOpacity style ={{marginRight: 10}} onPress={() => alert('Right Menu Clicked')}>
+					<Icon
+						name="cart-arrow-down"
+						size={24}
+					/>
+				</TouchableOpacity>
+			  ),
 		};
 	};
 
@@ -103,6 +110,7 @@ var styles = StyleSheet.create({
 		color: "#eee",
 		alignSelf: 'center',
 		textAlign: 'center',
+		flex:1 
 	},
 	MainContainer: {
 		flex: 1,

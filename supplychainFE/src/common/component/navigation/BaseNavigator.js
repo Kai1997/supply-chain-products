@@ -4,27 +4,46 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {createBottomTabNavigator} from 'react-navigation-tabs'
 import { createStackNavigator } from 'react-navigation-stack'
 
-import Home from "../../../components/home/home";
-import Contact from "../../../components/contact/contact";
-import Account from "../../../components/account/account";
+import Home from "../../../screens/home/home";
+import Contact from "../../../screens/contact/contact";
+import Settings_Activity from '../../../components/Settings_Activity';
+import Details_Activity from '../../../components/Details_Activity';
+import Profile_Activity from '../../../components/Profile_Activity';
+import HomeScreen from '../../../screens/account/HomeScreen';
+import LoginScreen from '../../../screens/account/LoginScreen';
+import RegisterScreen from '../../../screens/account/RegisterScreen';
+import ForgotPasswordScreen from '../../../screens/account/ForgotPasswordScreen';
+import Dashboard from '../../../screens/account/Dashboard';
 
-import Settings_Activity from '../../../screens/Settings_Activity';
-import Details_Activity from '../../../screens/Details_Activity';
-import Profile_Activity from '../../../screens/Profile_Activity';
+import MenuComponent from '../sidebarMenu/SideBar';
 
-
-const HomeTab = createStackNavigator(
+const MenuComponentTab = createStackNavigator(
   {
-    Home: Home ,
-    Details: Details_Activity ,
+    MenuComponent: Contact
   },
   {
     defaultNavigationOptions: {
       headerStyle: {
-        backgroundColor: '#0091EA',
+        backgroundColor: '#df3237',
+      },
+      headerTintColor: '#fff'
+     
+    },
+  }
+);
+
+const HomeTab = createStackNavigator(
+  {
+    Home: Home ,
+    Details: Details_Activity
+  },
+  {
+    defaultNavigationOptions: {
+      headerStyle: {
+        backgroundColor: '#df3237',
       },
       headerTintColor: '#fff',
-      title: 'Home Tab',
+      title: 'Home',
      
     },
   }
@@ -39,10 +58,10 @@ const SettingsTab = createStackNavigator(
   {
     defaultNavigationOptions: {
       headerStyle: {
-        backgroundColor: '#0091EA',
+        backgroundColor: '#df3237',
       },
-      headerTintColor: '#FFFFFF',
-      title: 'Settings Tab',
+      headerTintColor: '#FFFFFF'
+      // title: 'Settings',
      
     },
   }
@@ -50,20 +69,20 @@ const SettingsTab = createStackNavigator(
 
 const ProfilesTab = createStackNavigator(
   {
-    Account: Account ,
-    // HomeScreen: HomeScreen,
-    // LoginScreen: LoginScreen,
-    // RegisterScreen: RegisterScreen,
-    // ForgotPasswordScreen: ForgotPasswordScreen,
-    // Dashboard: Dashboard,
+    HomeScreen: HomeScreen,
+    LoginScreen: LoginScreen,
+    RegisterScreen: RegisterScreen,
+    ForgotPasswordScreen: ForgotPasswordScreen,
+    Dashboard: Dashboard,
   },
   {
     defaultNavigationOptions: {
       headerStyle: {
-        backgroundColor: '#0091EA',
+        backgroundColor: '#df3237',
       },
       headerTintColor: '#fff',
-      title: 'Profiles Tab',
+      tabBarVisible:false,
+      // title: 'Account',
      
     },
   }
@@ -73,7 +92,8 @@ const BaseNavigator = createBottomTabNavigator(
     {
     Home: HomeTab ,
     Account: ProfilesTab,
-    Settings: SettingsTab ,
+    Promotion: SettingsTab ,
+    Me: MenuComponentTab,
   },
   {
     defaultNavigationOptions: ({ navigation }) => ({
@@ -95,10 +115,19 @@ const BaseNavigator = createBottomTabNavigator(
                     size={24}
                 />
             );
-        } else {
+        } else if (routeName === 'Menu') {
+          return (
+          <Icon
+                  name="book"
+                  color={tintColor}
+                  size={24}
+              />
+          );
+      } 
+        else {
           return (
             <Icon
-                    name="setting"
+                    name="info"
                     color={tintColor}
                     size={24}
                 />
@@ -107,7 +136,7 @@ const BaseNavigator = createBottomTabNavigator(
       },
     }),
     tabBarOptions: {
-      activeTintColor: '#FF6F00',
+      activeTintColor: '#ff2600',
       inactiveTintColor: '#263238',
     },
   }
