@@ -5,7 +5,11 @@ import {createBottomTabNavigator} from 'react-navigation-tabs'
 import { createStackNavigator } from 'react-navigation-stack'
 
 import Home from "../../../screens/home/home";
-import Contact from "../../../screens/contact/contact";
+import Chat from "../../../screens/chat/chat";
+import Search from "../../../screens/search/search";
+import Setting from "../../../screens/setting/Setting";
+import Notify from "../../../screens/notification/notify";
+
 import Settings_Activity from '../../../components/Settings_Activity';
 import Details_Activity from '../../../components/Details_Activity';
 import Profile_Activity from '../../../components/Profile_Activity';
@@ -15,11 +19,10 @@ import RegisterScreen from '../../../screens/account/RegisterScreen';
 import ForgotPasswordScreen from '../../../screens/account/ForgotPasswordScreen';
 import Dashboard from '../../../screens/account/Dashboard';
 
-import MenuComponent from '../sidebarMenu/SideBar';
 
-const MenuComponentTab = createStackNavigator(
+const ChatComponentTab = createStackNavigator(
   {
-    MenuComponent: Contact
+    Chat: Chat
   },
   {
     defaultNavigationOptions: {
@@ -27,6 +30,23 @@ const MenuComponentTab = createStackNavigator(
         backgroundColor: '#df3237',
       },
       headerTintColor: '#fff'
+     
+    },
+  }
+);
+
+const SearchComponentTab = createStackNavigator(
+  {
+    Search: Search ,
+    Category: Details_Activity
+  },
+  {
+    defaultNavigationOptions: {
+      headerStyle: {
+        backgroundColor: '#df3237',
+      },
+      headerTintColor: '#fff',
+      headerShown: false      
      
     },
   }
@@ -49,26 +69,24 @@ const HomeTab = createStackNavigator(
   }
 );
 
-const SettingsTab = createStackNavigator(
+const InfomationTab = createStackNavigator(
   {
-    Settings: Settings_Activity ,
-    Details: Details_Activity ,
-    Profile: Profile_Activity ,
+    Notify: Notify
   },
   {
     defaultNavigationOptions: {
       headerStyle: {
         backgroundColor: '#df3237',
       },
-      headerTintColor: '#FFFFFF'
-      // title: 'Settings',
-     
+      headerTintColor: '#FFFFFF',
+      title: 'Thông báo',
     },
   }
 );
 
 const ProfilesTab = createStackNavigator(
   {
+    Main: Setting,
     HomeScreen: HomeScreen,
     LoginScreen: LoginScreen,
     RegisterScreen: RegisterScreen,
@@ -90,16 +108,17 @@ const ProfilesTab = createStackNavigator(
 
 const BaseNavigator = createBottomTabNavigator(
     {
-    Home: HomeTab ,
-    Account: ProfilesTab,
-    Promotion: SettingsTab ,
-    Me: MenuComponentTab,
+    'Trang chủ': HomeTab ,
+    'Thông báo': InfomationTab ,
+    'Tìm kiếm': SearchComponentTab,
+    'Trò chuyện': ChatComponentTab,
+    'Tài khoản': ProfilesTab,
   },
   {
     defaultNavigationOptions: ({ navigation }) => ({
       tabBarIcon: ({ focused, horizontal, tintColor }) => {
         const { routeName } = navigation.state;
-        if (routeName === 'Home') {
+        if (routeName === 'Trang chủ') {
           return (
             <Icon
                     name="home"
@@ -107,18 +126,26 @@ const BaseNavigator = createBottomTabNavigator(
                     size={24}
                 />
           );
-        } else if (routeName === 'Account') {
+        } else if (routeName === 'Tài khoản') {
             return (
             <Icon
-                    name="user"
+                    name="user-o"
                     color={tintColor}
                     size={24}
                 />
             );
-        } else if (routeName === 'Menu') {
+        } else if (routeName === 'Tìm kiếm') {
+            return (
+            <Icon
+                    name="search"
+                    color={tintColor}
+                    size={24}
+                />
+            );
+        } else if (routeName === 'Thông báo') {
           return (
           <Icon
-                  name="book"
+                  name="envelope-open-o"
                   color={tintColor}
                   size={24}
               />
@@ -127,7 +154,7 @@ const BaseNavigator = createBottomTabNavigator(
         else {
           return (
             <Icon
-                    name="info"
+                    name="comment-o"
                     color={tintColor}
                     size={24}
                 />
