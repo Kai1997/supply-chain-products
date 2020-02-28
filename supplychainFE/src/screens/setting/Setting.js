@@ -3,8 +3,9 @@ import { ListItem, Icon } from "react-native-elements";
 import {
 	StyleSheet,
 	Text,
-    View,
-    TouchableOpacity
+  View,
+  TouchableOpacity,
+  Modal
 } from "react-native";
 
 import { connect } from 'react-redux';
@@ -70,6 +71,7 @@ class Setting extends Component {
                   }
                  
               ],
+              modalVisible: false,
 			
 
 		};
@@ -77,10 +79,33 @@ class Setting extends Component {
 
 	componentDidMount() {
 
-	}
+  }
+  setModalVisible(visible) {
+    this.setState({modalVisible: visible});
+  }
 	render() {
 		return (
 			<View style={styles.settingContainer}>
+        <Modal
+          animationType="slide"
+          transparent={false}
+          visible={this.state.modalVisible}
+          onRequestClose={() => {
+            alert('Modal has been closed.');
+          }}>
+          <View style={{marginTop: 22}}>
+            <View>
+              <Text>Hello World!</Text>
+
+              <TouchableOpacity
+                onPress={() => {
+                  this.setModalVisible(!this.state.modalVisible);
+                }}>
+                <Text>Hide Modal</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
                 <ScrollView>
                 <View>
                         <Text></Text>
@@ -134,7 +159,9 @@ class Setting extends Component {
                                 leftIcon={{ name: item.icon }}
                                 bottomDivider
                                 chevron
-                                onPress ={() => {alert(`${item.title}`)}}
+                                onPress={() => {
+                                  this.setModalVisible(true);
+                                }}
                             />
                         ))
                     }

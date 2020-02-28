@@ -46,14 +46,14 @@ class Search extends React.Component {
 		return (
 			<View style={styles.searchContainer}>
 				<SearchBar
-					placeholder="Tim kim..."
+					placeholder="Tìm kiếm..."
 					onChangeText={this.updateSearch}
 					value={this.state.search}
 					lightTheme = {true}
 					cancelButtonTitle="Cancel"
 					inputStyle={{backgroundColor: 'white'}}
-					containerStyle={{backgroundColor: 'white', borderWidth: 1, borderRadius: 5}}
-					placeholderTextColor={'#g5g5g5'}
+					containerStyle={{backgroundColor: 'white', borderWidth: 1, borderRadius: 10, margin: 3}}
+					placeholderTextColor={'#eb4034'}
 					/>
 				<View style ={{padding: 4}}>
 					<ScrollView  horizontal={true} style={styles.container}>  
@@ -87,7 +87,7 @@ class Search extends React.Component {
 						</View>  
 					</ScrollView> 
 				</View>
-				<Text style ={{paddingLeft: 10,color: 'blue'}}>Nỗi bật</Text>
+				<Text style ={{paddingLeft: 10,color: 'blue'}}>Lịch sử tìm kiếm</Text>
 				<Text>{this.state.search}</Text>	
 			</View>
 

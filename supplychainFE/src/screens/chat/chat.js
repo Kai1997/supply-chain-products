@@ -19,7 +19,7 @@ class Chat extends React.Component {
 		const { state, setParams } = navigation;
 		return {
 			drawerLabel: "Chat",
-			title: "Chat",
+			title: "Trò chuyện",
 			headerStyle: styles.headerStyle,
 			headerTitleStyle: styles.headerTitleStyle,
 			headerTintColor: "white"
@@ -38,7 +38,7 @@ class Chat extends React.Component {
 	render() {
 		return (
 			<View style={styles.contactContainer}>
-				<View ><Text >Contact</Text></View>
+				<View ><Text >chat</Text></View>
 			</View>
 
 		)

@@ -8,10 +8,13 @@ import {
 	ScrollView,
 	TouchableOpacity
 } from "react-native";
+
 import { connect } from 'react-redux';
 import { getInfoProductAction } from '../../actions/homeActions/actionCreators';
 import { withNavigation, NavigationActions } from "react-navigation";
 import IconCart from '../../components/IconCart'
+import HomeImageProduct from '../../components/HomeImageProduct'
+import Map from '../../components/Map'
 class Home extends Component {
 	static navigationOptions = ({ navigation }) => {
 		const { state, setParams } = navigation;
@@ -97,15 +100,33 @@ class Home extends Component {
 							margin: 0,
 							backgroundColor: "rgba(128, 128, 128, 0.92)"
 						}}
-						ImageComponentStyle={{borderRadius: 15, width: '90%', marginTop: 5}}
+						ImageComponentStyle={{borderRadius: 15, width: '95%', marginTop: 5}}
 						imageLoadingColor="#2196F3"
 					/>
-					<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', border: 1 }}>
-						<Text>test</Text>
-						
+					<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', border: 1, flexDirection: 'row',backgroundColor: '#ede9b4'}}>
+						<TouchableOpacity
+							style={{padding: 20, backgroundColor: '#e39d98', borderRadius: 10, margin: 10}}
+							onPress={() => alert("Ticket")}>
+							<Icon name ='ticket' size ={24}/>
+						</TouchableOpacity>
+						<TouchableOpacity
+							style={{padding: 20, backgroundColor: '#c1ebb2', borderRadius: 10, margin: 10}}
+							onPress={() => alert("Khuyen mai")}>
+							<Icon name ='star' size ={24}/>
+						</TouchableOpacity>
+						<TouchableOpacity
+							style={{padding: 20, backgroundColor: '#aad7e3', borderRadius: 10, margin: 10}}
+							onPress={() => alert("test1")}>
+							<Icon name ='times' size ={24}/>
+						</TouchableOpacity>
+						<TouchableOpacity
+							style={{padding: 20, backgroundColor: '#e8badc', borderRadius: 10, margin: 10}}
+							onPress={() => alert("test2")}>
+							<Icon name ='ticket' size ={24}/>
+						</TouchableOpacity>
 					</View>
 					<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-						<TouchableOpacity
+						{/* <TouchableOpacity
 							style={styles.button}
 							onPress={() => this.props.navigation.navigate('Settings')}>
 							<Text style={styles.text}>Go to settngs Tab</Text>
@@ -115,7 +136,98 @@ class Home extends Component {
 							onPress={() => this.props.navigation.navigate('Profile')}>
 
 							<Text style={styles.text}>Goto Profile Screen</Text>
+						</TouchableOpacity> */}
+						<ScrollView
+							scrollEventThrottle={16}
+						>
+							<View style={{ flex: 1, backgroundColor: 'white', paddingTop: 20 }}>
+								<Text style={{ fontSize: 24, fontWeight: '500', paddingHorizontal: 20 }}>
+									Khám phá sản phẩm quanh bạn 
+								</Text>
+
+								<View style={{ height: 130, marginTop: 20 }}>
+									<ScrollView
+										horizontal={true}
+										showsHorizontalScrollIndicator={false}
+									>
+										<HomeImageProduct imageUri={'https://source.unsplash.com/1024x768/?nature'}
+											name="a"
+										/>
+										<HomeImageProduct imageUri={'https://source.unsplash.com/1024x768/?nature'}
+											name="b"
+										/>
+										<HomeImageProduct imageUri={'https://source.unsplash.com/1024x768/?nature'}
+											name="c"
+										/>
+										<HomeImageProduct imageUri={'https://source.unsplash.com/1024x768/?nature'}
+											name="d"
+										/>
+										<HomeImageProduct imageUri={'https://source.unsplash.com/1024x768/?nature'}
+											name="e"
+										/>
+										<HomeImageProduct imageUri={'https://source.unsplash.com/1024x768/?nature'}
+											name="f"
+										/>
+										
+									</ScrollView>
+								</View>
+							</View>
+						</ScrollView>
+					</View>
+					<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+						{/* <TouchableOpacity
+							style={styles.button}
+							onPress={() => this.props.navigation.navigate('Settings')}>
+							<Text style={styles.text}>Go to settngs Tab</Text>
 						</TouchableOpacity>
+						<TouchableOpacity
+							style={styles.button}
+							onPress={() => this.props.navigation.navigate('Profile')}>
+
+							<Text style={styles.text}>Goto Profile Screen</Text>
+						</TouchableOpacity> */}
+						<ScrollView
+							scrollEventThrottle={16}
+						>
+							<View style={{ flex: 1, backgroundColor: 'white', paddingTop: 20, marginTop: 20 }}>
+								<Text style={{ fontSize: 24, fontWeight: '500', paddingHorizontal: 20 }}>
+									Sản phẩm nổi bật
+								</Text>
+
+								<View style={{ height: 130, marginTop: 20 }}>
+									<ScrollView
+										horizontal={true}
+										showsHorizontalScrollIndicator={false}
+									>
+										<HomeImageProduct imageUri={'https://source.unsplash.com/1024x768/?nature'}
+											name="a"
+										/>
+										<HomeImageProduct imageUri={'https://source.unsplash.com/1024x768/?nature'}
+											name="b"
+										/>
+										<HomeImageProduct imageUri={'https://source.unsplash.com/1024x768/?nature'}
+											name="c"
+										/>
+										<HomeImageProduct imageUri={'https://source.unsplash.com/1024x768/?nature'}
+											name="d"
+										/>
+										<HomeImageProduct imageUri={'https://source.unsplash.com/1024x768/?nature'}
+											name="e"
+										/>
+										<HomeImageProduct imageUri={'https://source.unsplash.com/1024x768/?nature'}
+											name="f"
+										/>
+										
+									</ScrollView>
+								</View>
+							</View>
+						</ScrollView>
+					</View>
+					<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', border: 1, flexDirection: 'row',backgroundColor: 'white', marginTop: 20, borderRadius: 5}}>
+						<Map />
+					</View>
+					<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', border: 1, flexDirection: 'row',backgroundColor: 'white', marginTop: 20, borderRadius: 5}}>
+						<Text>asdasd</Text>
 					</View>
 				</ScrollView>
 			</View>
