@@ -3,8 +3,11 @@ const Token_remote_Key = 'auth';
 import {AsyncStorage} from 'react-native';
 export const GetToken = () => {
     if (AsyncStorage && AsyncStorage.getItem(Token_remote_Key)) {
+        console.log("aaa");
+        console.log(AsyncStorage.getItem(Token_remote_Key));
         return (AsyncStorage.getItem(Token_remote_Key));
     } else {
+        console.log("aaadd");
         return false;
     }
     

@@ -4,13 +4,17 @@ import { middleware } from '../middleware/middleware'
 import thunk from 'redux-thunk'
 import { GetToken } from '../common/utilities/utilities';
 
-let userAccount = GetToken() || {
+// let userAccount = GetToken() || {
+//     accesstoken: '',
+//     isAuthenticated: false
+// };
+let userAccount = {
     accesstoken: '',
     isAuthenticated: false
 };
-
 const initState = {
-        account: {...userAccount,
+        account: {
+            status:{...userAccount},
             register: {
                 result: false,
                 message: ''

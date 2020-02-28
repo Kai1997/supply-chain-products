@@ -13,7 +13,7 @@ import {
 import { connect } from 'react-redux';
 import { getInfoProductAction } from '../../actions/homeActions/actionCreators';
 import { withNavigation, NavigationActions } from "react-navigation";
-
+import HomeScreen from '../../screens/account/HomeScreen';
 class Chat extends React.Component {
 	static navigationOptions = ({ navigation }) => {
 		const { state, setParams } = navigation;
@@ -34,14 +34,23 @@ class Chat extends React.Component {
 	}
 
 	componentDidMount() {
+		
 	}
 	render() {
-		return (
-			<View style={styles.contactContainer}>
-				<View ><Text >chat</Text></View>
-			</View>
-
-		)
+		console.log("asdasd",!this.props.isAuthenticated);
+		if (!this.props.isAuthenticated) {
+			return (
+				<HomeScreen />
+			)
+		} else {
+			return (
+				<View style={styles.contactContainer}>
+					<View ><Text >chat</Text></View>
+				</View>
+	
+			)
+		}
+		
 	}
 }
 
@@ -62,8 +71,9 @@ var styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
+	console.log(state)
 	return {
-		
+		isAuthenticated: state.account.status.isAuthenticated
 	}
 }
 

@@ -84,6 +84,7 @@ class Setting extends Component {
     this.setState({modalVisible: visible});
   }
 	render() {
+    let {isAuthenticated} = this.props;
 		return (
 			<View style={styles.settingContainer}>
         <Modal
@@ -110,13 +111,19 @@ class Setting extends Component {
                 <View>
                         <Text></Text>
                         <Text></Text>
-                    <ListItem
+                        {(!isAuthenticated)?(<ListItem
                             title="Dang nhap"
                             leftIcon={{ name: 'account-circle' }}
                             bottomDivider
                             chevron
                             onPress ={() => {this.props.navigation.navigate('HomeScreen')}}
-                        />
+                        />):(<ListItem
+                            title="Khai"
+                            leftIcon={{ name: 'account-circle' }}
+                            bottomDivider
+                            chevron
+                            onPress ={() => {this.props.navigation.navigate('Profile')}}
+                        />)}
                     </View>
                     <View>
                         <Text></Text>
@@ -191,7 +198,7 @@ var styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
 	return {
-		
+    isAuthenticated: state.account.status.isAuthenticated
 	}
 }
 
