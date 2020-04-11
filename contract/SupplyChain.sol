@@ -1,6 +1,6 @@
 pragma solidity ^0.4.25;
 
-// dev : 
+// dev : 0x410D19770Ed17458e686DFf0D26cb63c81449929
 
 /*==========================================
  =          Interface Ownable              =
@@ -452,12 +452,12 @@ contract SupplyChain {
    *@param _productID : is ID of product.
    *@modifier isFarmerMain : Call modifier to check Farmer has account in system or not.
    */
-  function harvestProduct(string _productID,string _upc, address _originFarmerID,  string  _productNotes,  string  _img) public isFarmerMain(msg.sender) verifyStatus
+  function harvestProduct(string _productID,string _upc,  string  _productNotes,  string  _img) public isFarmerMain(msg.sender) verifyStatus
   {
     products[_upc] = Product({
       upc: _upc,
-      ownerID: _originFarmerID,
-      originFarmerID: _originFarmerID,
+      ownerID: msg.sender,
+      originFarmerID: msg.sender,
       productID: _productID,
       productNotes: _productNotes,
       img: _img,
@@ -470,7 +470,7 @@ contract SupplyChain {
       consumerID: address(0) 
     });
     
-    emit LogHarvested(_productID, _upc, _productNotes, _originFarmerID, "farmer", State.Harvested);
+    emit LogHarvested(_productID, _upc, _productNotes, msg.sender, "farmer", State.Harvested);
   }
 
   /*function process Product
@@ -482,7 +482,7 @@ contract SupplyChain {
   function processProduct(string _upc) public 
     harvested(_upc)
     isManufacturerMain(msg.sender)
-    verifyCaller(products[_upc].manufacturerID)
+    //verifyCaller(products[_upc].manufacturerID) 
     verifyStatus
   {
     Product storage product = products[_upc];
@@ -502,19 +502,17 @@ contract SupplyChain {
    *@modifier isManufacturerMain : Call modifier to check manufacturer has account in system or not.
    *@modifier verifyCaller : Call modifier to verify caller of this function is manufacturer
    */
-  function packProduct(string _upc, uint _price, address _distributorID) public 
+  function packProduct(string _upc, uint _price) public 
   processed(_upc)
   isManufacturerMain(msg.sender)
-  verifyCaller(products[_upc].manufacturerID) 
+  //verifyCaller(products[_upc].manufacturerID) 
   verifyStatus
   {
     Product storage product = products[_upc];
-    
-    product.productState = State.Packed;
     product.productPrice = _price;
-    product.distributorID = _distributorID;
+    product.productState = State.Packed;
     
-    emit LogPacked(product.productID, _upc, product.productNotes, msg.sender, "distributor", State.Packed);
+    emit LogPacked(product.productID, _upc, product.productNotes, msg.sender, "manufacturer", State.Packed);
   }
 
   /*function distributor Product
@@ -524,19 +522,19 @@ contract SupplyChain {
    *@modifier isDistributorMain : Call modifier to check Distributor has account in system or not.
    *@modifier verifyCaller : Call modifier to verify caller of this function is Distributor
    */
-  function distributorProduct(string _upc, address _retailerID) public 
+  function distributorProduct(string _upc) public 
   packed(_upc)
   isDistributorMain(msg.sender)
-  verifyCaller(products[_upc].distributorID)
+  //verifyCaller(products[_upc].distributorID)
   verifyStatus
   {
     Product storage product = products[_upc];
      
     product.ownerID = msg.sender;
     product.productState = State.Distributor;
-    product.retailerID = _retailerID;
+    //product.retailerID = _retailerID;
     
-    emit LogDistributor(product.productID, _upc, product.productNotes, msg.sender, "manufacturer", State.Distributor);
+    emit LogDistributor(product.productID, _upc, product.productNotes, msg.sender, " distributor ", State.Distributor);
   }
 
   /*function retailer Product
@@ -546,7 +544,7 @@ contract SupplyChain {
    *@modifier isRetailerMain : Call modifier to check Retailer has account in system or not.
    *@modifier verifyCaller : Call modifier to verify caller of this function is Retailer
    */
-  function retailerProduct(string _upc, address _thirdPLID)  public  
+  function retailerProduct(string _upc)  public  
   distributor(_upc)
   isRetailerMain(msg.sender)
   verifyCaller(products[_upc].retailerID)
@@ -555,7 +553,7 @@ contract SupplyChain {
     Product storage product = products[_upc];
     
     product.ownerID = msg.sender;
-    product.thirdPLID = _thirdPLID;
+    //product.thirdPLID = _thirdPLID;
     product.productState = State.Retailer;
     
     emit LogRetailer(product.productID, _upc, product.productNotes, msg.sender, "retailer", State.Retailer);
@@ -589,7 +587,7 @@ contract SupplyChain {
    *@modifier verifyCaller : Call modifier to verify caller of this function is Retailer
    */
     function purchaseProduct(
-        string _upc, address _consumerID
+        string _upc
     )  
     public 
     isRetailerMain(msg.sender)
@@ -599,8 +597,8 @@ contract SupplyChain {
     {
         Product storage product = products[_upc];
         
-        product.ownerID = _consumerID;
-        product.consumerID = _consumerID;
+       // product.ownerID = _consumerID;
+        //product.consumerID = _consumerID;
         product.productState = State.Purchased;
         
         emit LogPurchased(product.productID, _upc, product.productNotes, msg.sender, "consumer", State.Purchased);
