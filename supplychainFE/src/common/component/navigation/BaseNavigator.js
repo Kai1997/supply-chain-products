@@ -4,12 +4,13 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {createBottomTabNavigator} from 'react-navigation-tabs'
 import { createStackNavigator } from 'react-navigation-stack'
 
-import Home from "../../../screens/home/home";
+import MainHome from "../../../screens/home/main";
 import Chat from "../../../screens/chat/chat";
 import Search from "../../../screens/search/search";
 import Setting from "../../../screens/setting/Setting";
 import Notify from "../../../screens/notification/notify";
-
+import BarcodeScanner from "../../../screens/barcode/barcodeGenerator";
+import DataScan from '../../../screens/barcode/dataScan' 
 import Articles from '../../../components/Test'
 import Articles2 from '../../../components/test2'
 import Product from '../../../screens/detail/detailProduct'
@@ -23,7 +24,7 @@ import Dashboard from '../../../screens/account/Dashboard';
 
 const ChatComponentTab = createStackNavigator(
   {
-    'C': Product,
+    'C': Chat,
     'Chat': Articles,
     'Article': Articles2
   },
@@ -54,10 +55,25 @@ const SearchComponentTab = createStackNavigator(
     },
   }
 );
-
+const ScanComponentTab = createStackNavigator(
+  {
+    Scan:  BarcodeScanner,
+    Product: DataScan
+  },
+  {
+    defaultNavigationOptions: {
+      headerStyle: {
+        backgroundColor: '#df3237',
+      },
+      headerTintColor: '#fff',
+      // headerShown: false      
+     
+    },
+  }
+);
 const HomeTab = createStackNavigator(
   {
-    Home: Home ,
+    Home: MainHome ,
     Details: Details_Activity
   },
   {
@@ -112,8 +128,10 @@ const ProfilesTab = createStackNavigator(
 const BaseNavigator = createBottomTabNavigator(
     {
     'Trang chủ': HomeTab ,
-    'Thông báo': InfomationTab ,
+    // 'Thông báo': InfomationTab ,
     'Tìm kiếm': SearchComponentTab,
+    'Quét': ScanComponentTab,
+
     'Trò chuyện': ChatComponentTab,
     'Tài khoản': ProfilesTab,
   },
@@ -141,6 +159,14 @@ const BaseNavigator = createBottomTabNavigator(
             return (
             <Icon
                     name="search"
+                    color={tintColor}
+                    size={24}
+                />
+            );
+          } else if (routeName === 'Quét') {
+            return (
+            <Icon
+                    name="barcode"
                     color={tintColor}
                     size={24}
                 />

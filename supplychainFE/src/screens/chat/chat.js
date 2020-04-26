@@ -22,8 +22,9 @@ class Chat extends React.Component {
 			title: "Trò chuyện",
 			headerStyle: styles.headerStyle,
 			headerTitleStyle: styles.headerTitleStyle,
-			headerTintColor: "white"
-			// headerRight: <MenuIcon />
+			headerTintColor: "white",
+			headerShown: false
+
 		};
 	};
 

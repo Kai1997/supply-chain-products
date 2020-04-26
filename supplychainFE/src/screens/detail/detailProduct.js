@@ -200,15 +200,6 @@ class Product extends Component {
           <View style={styles.productRow}>{this.renderNavigator()}</View>
           <View style={styles.productRow}>{this.renderDetail()}</View>
         </ScrollView>
-        <View style={styles.footer}>
-          <TouchableOpacity style={styles.buttonFooter}>
-            <Text style={styles.textFooter}>CALL</Text>
-          </TouchableOpacity>
-          <View style={styles.borderCenter} />
-          <TouchableOpacity style={styles.buttonFooter}>
-            <Text style={styles.textFooter}>EMAIL</Text>
-          </TouchableOpacity>
-        </View>
       </View>
     )
   }

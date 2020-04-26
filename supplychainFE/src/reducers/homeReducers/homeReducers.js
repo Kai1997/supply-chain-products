@@ -16,7 +16,7 @@ export default function homeReducers(state = initialState, action) {
         case HOME_INCREASE_VIEW_POST:
             return { ...state};
         case HOME_GET_INFO_PRODUCT:
-            return { ...state, infoProduct: action.infoProduct };
+            return { ...state, infoProduct: action.infoProduct};
         default:
             return state;
     }

@@ -60,29 +60,30 @@ class Search extends React.Component {
 						<View style={[{ width: 220,height: 70,padding: 10 }]}>  
 							<Button  
 								onPress={() => {this.updateSearch("Danh mục")}}  
+								style ={styles.search}
 								title="Danh mục"  
-								color="#bee6e1"  
+								color="#745f8c"  
 							/>  
 						</View>  
 						<View style={[{ width: 220,height: 70,padding: 10 }]}>  
 							<Button  
 								onPress={() => {this.updateSearch("Sản phẩm")}}  
 								title="Sản phẩm"  
-								color="#bee6e1"  
+								color="#745f8c"  
 							/>  
 						</View>  
 						<View style={[{ width: 220,height: 70,padding: 10 }]}>  
 							<Button  
 								onPress={() => {this.updateSearch("Danh nghiệp")}}  
 								title="Danh nghiệp"  
-								color="#bee6e1"  
+								color="#745f8c"  
 							/>  
 						</View>  
 						<View style={[{ width: 220,height: 70,padding: 10 }]}>  
 							<Button  
 								onPress={() => {this.updateSearch("Xu hướng")}}  
 								title="Xu hướng"  
-								color="#bee6e1"  
+								color="#745f8c"  
 							/>  
 						</View>  
 					</ScrollView> 
@@ -109,6 +110,9 @@ var styles = StyleSheet.create({
 		color: "#eee",
 		alignSelf: 'center',
 		textAlign: 'center',
+	},
+	search: {
+		borderRadius: 20
 	}
 });
 

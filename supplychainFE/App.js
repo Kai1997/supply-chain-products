@@ -63,30 +63,30 @@ const slides = [
     imageStyle: styles.image,
     backgroundColor: '#B4EBCA',
   },
-  {
-    key: 's3',
-    title: 'Just Dating ',
-    text: 'let hangout and enjoy together with special place and special deal',
-    image: {
-      uri: 'https://imgur.com/RPI8wie.png',
-    },
-    titleStyle: styles.title,
-    textStyle: styles.text,
-    imageStyle: styles.image,
-    backgroundColor: '#D9F2B4',
-  },
-  {
-    key: 's4',
-    title: 'Got new Love',
-    text: ' Your not lonly anymore',
-    image: {
-      uri: 'https://imgur.com/f1GhQo1.png',
-    },
-    titleStyle: styles.title,
-    textStyle: styles.text,
-    imageStyle: styles.image,
-    backgroundColor: '#FFB7C3',
-  }
+  // {
+  //   key: 's3',
+  //   title: 'Just Dating ',
+  //   text: 'let hangout and enjoy together with special place and special deal',
+  //   image: {
+  //     uri: 'https://imgur.com/RPI8wie.png',
+  //   },
+  //   titleStyle: styles.title,
+  //   textStyle: styles.text,
+  //   imageStyle: styles.image,
+  //   backgroundColor: '#D9F2B4',
+  // },
+  // {
+  //   key: 's4',
+  //   title: 'Got new Love',
+  //   text: ' Your not lonly anymore',
+  //   image: {
+  //     uri: 'https://imgur.com/f1GhQo1.png',
+  //   },
+  //   titleStyle: styles.title,
+  //   textStyle: styles.text,
+  //   imageStyle: styles.image,
+  //   backgroundColor: '#FFB7C3',
+  // }
 ];
 export default class App extends React.Component {
   constructor(props, context) {

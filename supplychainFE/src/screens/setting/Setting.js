@@ -182,7 +182,7 @@ class Setting extends Component {
 
 var styles = StyleSheet.create({
 	settingContainer: {
-		marginBottom: 20
+		// marginBottom: 20
 	},
 	headerStyle: {
 		backgroundColor: "#df3237",

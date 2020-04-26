@@ -2361,6 +2361,14 @@ expo-asset@~8.0.0:
     path-browserify "^1.0.0"
     url-parse "^1.4.4"
 
+expo-barcode-scanner@^8.1.0:
+  version "8.1.0"
+  resolved "https://registry.yarnpkg.com/expo-barcode-scanner/-/expo-barcode-scanner-8.1.0.tgz#2f1504465725673a18453d976062b3aab55dd867"
+  integrity sha512-S9fpP4NKRml/xVpioHpixn0RSsGs3mgdhwjGjMitl3Cx/euxJtVy1UZK1zX5/62vFtO6gl/PQgeLGpv8Bm8w+w==
+  dependencies:
+    lodash "^4.6.0"
+    prop-types "^15.6.0"
+
 expo-constants@~8.0.0:
   version "8.0.0"
   resolved "https://registry.yarnpkg.com/expo-constants/-/expo-constants-8.0.0.tgz#e2c5a072dacb4263ccfc57dcb4835ca791960d48"
@@ -4465,6 +4473,11 @@ react-native-app-intro-slider@^3.0.0:
   resolved "https://registry.yarnpkg.com/react-native-app-intro-slider/-/react-native-app-intro-slider-3.0.0.tgz#c3620b967503ce410b3d767252392bb6fb2edf97"
   integrity sha512-2XXUYnSeMYZTLhdRYHSwv8mhoyuEaYxmQfXrWQInH1QvjsnJtKgvORI3bJuJN+tNPg3aut6JYYCNOFsI5of32A==
 
+react-native-dynamic-search-bar@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/react-native-dynamic-search-bar/-/react-native-dynamic-search-bar-0.3.1.tgz#25f8b661816852c710c6b4b8e571dc98532a45fd"
+  integrity sha512-yxuHDQrxSjJbsjAt5tWZn8jKh2evd0FnfPWikuHTuNLJhF0L5yK8vuwKxuYj4keOWydRKiwO69ZNGVaMJhvGCw==
+
 react-native-elements@^1.2.7:
   version "1.2.7"
   resolved "https://registry.yarnpkg.com/react-native-elements/-/react-native-elements-1.2.7.tgz#1eca2db715c41722aeb67aea62bd2a4621adb134"
@@ -4522,13 +4535,6 @@ react-native-keyboard-aware-scroll-view@^0.9.1:
   dependencies:
     prop-types "^15.6.2"
     react-native-iphone-x-helper "^1.0.3"
-
-react-native-lazyload@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/react-native-lazyload/-/react-native-lazyload-1.1.0.tgz#463d76ecbdec5cbe79060bce65b673e4b164b364"
-  integrity sha1-Rj127L3sXL55BgvOZbZz5LFks2Q=
-  dependencies:
-    react-native-scrollable-mixin "^1.0.1"
 
 react-native-lightbox@^0.8.1:
   version "0.8.1"
@@ -4597,11 +4603,6 @@ react-native-screens@2.0.0-alpha.12:
   integrity sha512-x9M7FEdcm97bVDp3pi//nhduJHLFMrmDQs0fq299yx3kHdgHbrmhsa8jgW4HvDQhjyPE0FWADY/GrXFuPRj80w==
   dependencies:
     debounce "^1.2.0"
-
-react-native-scrollable-mixin@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/react-native-scrollable-mixin/-/react-native-scrollable-mixin-1.0.1.tgz#34a32167b64248594154fd0d6a8b03f22740548e"
-  integrity sha1-NKMhZ7ZCSFlBVP0NaosD8idAVI4=
 
 react-native-snap-carousel@*:
   version "3.8.4"
@@ -4696,6 +4697,11 @@ react-navigation-drawer@^2.4.1:
   version "2.4.1"
   resolved "https://registry.yarnpkg.com/react-navigation-drawer/-/react-navigation-drawer-2.4.1.tgz#a9257c6ca56e1a5500bbd0c8539e986ffb3a4253"
   integrity sha512-wTfRKrxC2gPgLCdIEUOts92HlnVohSXlswvBfYFcfgEDLOPvFZeXBxUPbRXG2xAm+ktMsI2Qm67UR5B1iJMHBA==
+
+react-navigation-hooks@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/react-navigation-hooks/-/react-navigation-hooks-1.1.0.tgz#337c41a50ebc7b9030bb9d9333cd4fd6e1f86b68"
+  integrity sha512-ZY/aiYJ88KXaOo8iOa4171O/0x6ztGhUPd2OYzdaJhLT/tP64zi5HB/RZFImuKhaBTODXjoSpFaOTA5xpePG4g==
 
 react-navigation-stack@^2.1.1:
   version "2.1.1"
