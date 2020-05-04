@@ -1,3 +1,2 @@
 # supply-chain-products
-
-Supply chain S
+Supply chain System using Ethereum network
