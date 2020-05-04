@@ -1,6 +1,6 @@
 pragma solidity ^0.4.25;
 
-// dev : 0x410D19770Ed17458e686DFf0D26cb63c81449929
+// dev : 0x51986823e2198Be1Ad51602A39b097EfbC8B25B4
 
 /*==========================================
  =          Interface Ownable              =
@@ -531,6 +531,7 @@ contract SupplyChain {
     Product storage product = products[_upc];
      
     product.ownerID = msg.sender;
+    product.distributorID = msg.sender;
     product.productState = State.Distributor;
     //product.retailerID = _retailerID;
     
@@ -547,13 +548,13 @@ contract SupplyChain {
   function retailerProduct(string _upc)  public  
   distributor(_upc)
   isRetailerMain(msg.sender)
-  verifyCaller(products[_upc].retailerID)
+  //verifyCaller(products[_upc].retailerID)
   verifyStatus
   {
     Product storage product = products[_upc];
     
     product.ownerID = msg.sender;
-    //product.thirdPLID = _thirdPLID;
+    product.retailerID = msg.sender;
     product.productState = State.Retailer;
     
     emit LogRetailer(product.productID, _upc, product.productNotes, msg.sender, "retailer", State.Retailer);
@@ -566,13 +567,14 @@ contract SupplyChain {
    *@modifier verifyCaller : Call modifier to verify caller of this function is ThirdPL
    */
   function shipproduct(string _upc) public 
-  shipped(_upc)
+  retailer(_upc)
   isThirdPLMain(msg.sender)
-  verifyCaller(products[_upc].thirdPLID)
+  //verifyCaller(products[_upc].thirdPLID)
   verifyStatus
   {
     Product storage product = products[_upc];
-    
+    product.ownerID = msg.sender;
+    product.thirdPLID = msg.sender;
     product.productState = State.Shipped;
     
     emit LogShipped(product.productID, _upc, product.productNotes, msg.sender, "ship", State.Shipped);
@@ -592,7 +594,7 @@ contract SupplyChain {
     public 
     isRetailerMain(msg.sender)
     shipped(_upc) 
-    verifyCaller(products[_upc].retailerID)
+    //verifyCaller(products[_upc].retailerID)
     verifyStatus
     {
         Product storage product = products[_upc];

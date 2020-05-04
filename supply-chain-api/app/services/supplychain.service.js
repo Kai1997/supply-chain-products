@@ -45,12 +45,17 @@ class SupplychainService {
                             productNotes: productInfo["1"],
                             productPrice: productInfo["2"],
                             productState: productInfo["3"],
+                            productImg: productInfo["4"],
                             ownerID: productAddress["0"],
-                            originFarmerID: originFarmerID,
-                            distributorID: distributorID,
-                            manufacturerID: manufacturerID,
-                            thirdPLID: thirdPLID,
-                            retailerID: retailerID,
+                            actor: [
+                            	 originFarmerID,
+	                            manufacturerID,
+	                            distributorID,
+	                            thirdPLID,
+	                            retailerID,
+	                            
+                            ]
+                           
                         }
                         resolve({
                             status: true,    
